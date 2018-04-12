@@ -1,0 +1,243 @@
+---
+title: "Results ECML 2018"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+```{r packages, echo=F, include=F}
+library(knitr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(scmamp)
+```
+
+```{r global_options, include=F}
+knitr::opts_chunk$set(echo = FALSE, eval = TRUE,
+                     warning = FALSE, message = FALSE,
+                     fig.width = 8, fig.path = "images/")
+```
+
+
+```{r script_sources, include=F}
+source("../R/analyse_utils.R")
+cbPal <- c("#5e3c99", "#e66101")
+
+#' Abbreviate default experiment method names for use in plots
+#'
+#' @param x a vector of method names
+#'
+#' @return A vector of abbreviated names
+abbr_est_names <- function(x){
+  x <- gsub("all", "a", x)
+  x <- gsub("block", "b", x)
+  x <- gsub("rand", "r", x)
+  x <- gsub("contig", "c", x)
+  x <- gsub("checker", "s", x)
+  x <- gsub("sliding", "slW", x)
+  x <- gsub("growing", "grW", x)
+  x
+}
+
+```
+
+
+```{r load_art_res}
+load("art_sumRes_med.Rdata")
+
+sumRes <- sumRes %>% 
+  mutate(
+    estimator = abbr_est_names(as.character(estimator)),
+    Err = estimated - real, 
+    RelAbsErr = abs(estimated - real)/real,
+    RelErr = (estimated - real)/real,
+    AbsErr = abs(estimated - real)) %>%
+  filter(metric=="nmae")
+
+resMats <- sumRes %>% 
+  select(-c(real, estimated:RelErr)) %>%
+        tidyr::spread(estimator, AbsErr)
+```
+
+# Artificial results
+
+## Errors
+
+```{r art_box, fig.height=5, fig.width=13}
+x <- sumRes %>% 
+  filter(!grepl("slW", estimator),
+         !grepl("rmSP", estimator)) %>%
+  group_by(metric, estimator) %>%
+  mutate(med = median(Err, na.rm=T),
+         sd = sd(Err, na.rm=T),
+         medErr = ifelse(med>0, "over", ifelse(med<0, "under", "acc"))) %>%
+  separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
+    mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+  mutate(buffer=gsub("buff", "", buffer))
+
+
+gg1 <- ggplot(x, aes(x=estimator, y=Err, color = medErr)) + 
+  geom_boxplot() + 
+  scale_color_manual(values=cbPal) +
+  facet_grid(.~buffer, scales = "free_x", space = "free_x") +
+  theme(text = element_text(size=20),
+        strip.text = element_text(angle=90),
+        axis.text.x = element_text(angle = 90, hjust = 1 )) + 
+  geom_hline(yintercept=0, linetype = "dashed")
+
+print(gg1) 
+```
+
+## Relative errors
+
+
+```{r art_rel, fig.height=4, fig.width=8}
+x <- sumRes %>% 
+  filter(!grepl("rmSP", estimator),
+         !grepl("slW", estimator)) %>%
+  mutate(Type=cut(RelAbsErr, 
+                  breaks = c(0,0.005,0.01,Inf),
+                  labels = c("[0,0.5]%","]0.5,1]%", ">1%"),
+                  include.lowest=TRUE)) %>%
+  group_by(metric, estimator, Type) %>%
+  summarize(nType = n()) %>%
+  mutate(frac = nType/sum(nType)) %>%
+  separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
+    mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+  mutate(buffer=gsub("buff", "", buffer))
+
+gg4 <- ggplot(x, 
+       aes(x=estimator, y=frac, fill=Type)) + 
+  geom_bar(stat="identity") + 
+  facet_grid(.~buffer, scales = "free", space = "free") + 
+    theme(text = element_text(size=20),
+          axis.text.x = 
+            element_text(angle = 90, hjust = 1),
+          strip.text.x = element_text(angle=90)) +
+  scale_fill_brewer(palette="RdPu")
+
+print(gg4)
+```
+
+## Absolute errors
+
+## Best overall
+
+```{r art_fried_best, results="asis", fig.height=4, fig.width=8}
+MODELS <- c("lm", "ranger")
+for(model in MODELS){
+  g_size <- "GRID_SZ_64"
+  t_size <- "TIME_SZ_150"
+  
+  cat(paste("\n\n####", g_size, t_size, model))
+  resMat <- resMats %>%
+    filter(
+      grepl("nmae", metric),
+      grepl(!!quo(UQ(model)), model),
+      grepl(!!quo(UQ(g_size)), g_size),
+      grepl(!!quo(UQ(t_size)), t_size))
+  
+  r <- resMat[, which(colnames(resMat) %in% c(c("xTbSa", "xTbSa_Tbuff", "mc56.4", "pTbSr_grW", "xTrSr", "h80.20")))]
+  colnames(r) <- gsub("\\_grW", "", colnames(r))
+  colnames(r) <- gsub("buff", "", colnames(r))
+  plotCD(r, decreasing=FALSE, cex=1.25)
+}
+```
+
+# Real results
+
+## Errors
+
+```{r load real_res}
+load("real_sumRes_med_NArm.Rdata")
+
+realSumResTab <- realSumRes %>% 
+  mutate(estimator=as.character(estimator),
+         estimator = abbr_est_names(estimator)) %>%
+  mutate(
+    Err = estimated - real, 
+    RelAbsErr = abs(estimated - real)/real,
+    RelErr = (estimated - real)/real,
+    AbsErr = abs(estimated - real)) %>%
+  filter(metric=="nmae") %>%
+  filter(!(estimator %in% c("xTrSr_STbuff", "xTrSr_Tbuff")))
+
+realResMats <- realSumResTab %>% 
+  select(-c(real, estimated:RelErr)) %>%
+        tidyr::spread(estimator, AbsErr)
+```
+
+```{r real_box, fig.height=5, fig.width=10}
+x <- realSumResTab %>%
+            filter(!grepl("rmSP", estimator),
+                   !grepl("slW", estimator)) %>%
+  group_by(metric, estimator) %>%
+  mutate(med = median(Err, na.rm=T),
+         sd = sd(Err, na.rm=T),
+         medErr = ifelse(med>0, "over", ifelse(med<0, "under", "acc"))) %>%
+  separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
+    mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+  mutate(buffer=gsub("buff", "", buffer))
+
+ggplot(x %>% filter(!is.na(Err)), 
+              aes(x=estimator, y=Err, color = medErr)) + 
+  geom_boxplot() + 
+  scale_color_manual(values=cbPal) +
+  facet_grid(.~buffer, scales = "free_x", space = "free_x") +
+  theme(text = element_text(size=20),
+        strip.text = element_text(angle = 90),
+          axis.text.x = element_text(angle = 90, hjust = 1 )) + 
+  geom_hline(yintercept=0, linetype = "dashed")
+```
+
+## Relative errors
+
+```{r real_rel, fig.height=4, fig.width=8}
+x <- realSumResTab %>% 
+  filter(!grepl("slW", estimator),
+         !grepl("rmSP", estimator)) %>%
+  mutate(RelErr = abs(estimated - real)/real) %>%
+  mutate(Type=cut(RelErr, 
+                  breaks = c(-Inf,-0.3,-0.05,0,0.05,0.3,Inf),
+                  labels = c("<-30","[-30,-5]","]-5,0]","]0,5]","]5,30]", ">30"),
+                  include.lowest=TRUE)) %>%
+  group_by(metric, estimator, Type) %>%
+  summarize(nType = n()) %>%
+  mutate(frac = nType/sum(nType)) %>%
+  ungroup() %>%
+  separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
+  mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+  mutate(buffer=gsub("buff", "", buffer))
+
+ggplot(x, 
+       aes(x=estimator, y=frac, fill=Type)) + 
+  facet_grid(.~buffer, space = "free_x", scales="free_x") +
+  geom_bar(stat="identity") + 
+    theme(text = element_text(size=20),
+          axis.text.x = 
+            element_text(angle = 90, hjust = 1),
+          strip.text.x = element_text(angle=90)) +
+  scale_fill_brewer(palette="RdPu")
+  
+```
+
+## Absolute errors
+
+```{r real_fried_best, results="asis", fig.height=4, fig.width=8}
+for(model in c("lm", "rf")){
+  cat(paste0("\n\n####", model,"\n"))
+  resMat <- realResMats %>%
+    filter(
+      grepl("nmae", metric),
+           grepl(!!quo(UQ(model)), model))
+  
+    r <- resMat[, c("xTbSa", "xTbSr", "xTrSr_S", "pTbSr_grW", "h80.20", "pTbSa_grW", "xTrSr")]
+    colnames(r)<-gsub("buff", "", colnames(r))
+    colnames(r)<-gsub("\\_grW", "", colnames(r))
+    r <- r[complete.cases(r),]
+    plotCD(r, decreasing=FALSE, cex=1.25)
+}
+
+```
