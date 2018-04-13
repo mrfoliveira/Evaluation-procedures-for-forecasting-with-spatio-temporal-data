@@ -57,14 +57,12 @@ The repository is organized as follows:
 
 #### analysis
 
-Folder containing scripts for running experiments and analyse results.
-
 * step1_gen_data.R - data generation script
 * step2_artificial_experiments.R - running experiments on artificially generated datasets
 * step3_real_experiments.R - calculating spatio-temporal indicators and running experiments on real data sets
 
 
-#### Session Info
+## Session Info
 
 ```
 R version 3.4.0 (2017-04-21)
