@@ -105,7 +105,7 @@ t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form,
   
   # holdout percentage of data
   #for(i in 1:nreps){
-  mc.res <- foreach(i=1:nreps) %dopar% {
+  mc.res <- foreach::foreach(i=1:nreps) %dopar% {
     
     # get time-stamps within test set
     ts.ids <- time.ids[split.points[i]:(split.points[i] + test.size - 1)]
@@ -196,7 +196,7 @@ kf_xval <- function(data, nfolds, FUN, form,
   assertthat::assert_that(is.vector(folds),
               if(!is.null(nfolds)) length(unique(folds)) == nfolds)
   
-  cv.res <- foreach(i=unique(folds)) %dopar% {
+  cv.res <- foreach::foreach(i=unique(folds)) %dopar% {
     # each fold is used as test set once
     ts.inds <- which(folds == i)
     
@@ -289,7 +289,7 @@ prequential_eval <- function(data, nfolds, FUN, form,
   test_folds <- sort(unique(folds[test_fold_inds]))
   
   #for(f in unique(folds)){
-  pre.res <- foreach(f=test_folds) %dopar% {
+  pre.res <- foreach::foreach(f=test_folds) %dopar% {
       if(fold.alloc.proc != "Tblock_SPall"){
         fs <- as.numeric(stringr::str_split_fixed(f,"_", 2))
         t.f <- fs[1]
@@ -405,7 +405,7 @@ nd_kf_xval <- function(data, nfolds, FUN, form,
   assertthat::assert_that(is.vector(folds),
               if(!is.null(nfolds)) length(unique(folds)) == nfolds)
   
-  cv.res <- foreach(i=unique(folds)) %dopar% {
+  cv.res <- foreach::foreach(i=unique(folds)) %dopar% {
   #for(i in folds){
     # each fold is used as test set once
     ts.inds <- which(folds == i)

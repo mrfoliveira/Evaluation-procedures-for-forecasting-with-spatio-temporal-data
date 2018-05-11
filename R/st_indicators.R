@@ -221,7 +221,7 @@ get_all_neib_vals <- function(df, max_radius,
   require(dplyr)
 
   if(parallel){
-    neib_df <- foreach(i=0:(nsplits-1), .combine='rbind',
+    neib_df <- foreach::foreach(i=0:(nsplits-1), .combine='rbind',
       .export=c("get_st_neighbours"),
       .packages = c("dplyr", "stringr")) %dopar%{
       
@@ -251,7 +251,7 @@ get_all_neib_vals <- function(df, max_radius,
 
   cols <- c(site_id, time_id, vars)
   neib_df <- neib_df %>% left_join(df %>% dplyr::select(one_of(cols)), 
-                                   by=setNames(c(site_id, time_id),
+                                   by=stats::setNames(c(site_id, time_id),
                                    paste0("neib_", c(site_id, time_id)) ))
   neib_df
 }
@@ -309,11 +309,11 @@ get_st_indicator <- function(all_neib_vals, stat, radius,
   if(stat=="weighted.mean"){
     stat_df <- stat_df %>%  
       summarize_(value=paste0(stat, "(",var,", w=1/st_dist, na.rm=T)")) %>%
-      rename_(.dots=setNames("value", ind_name))  
+      rename_(.dots=stats::setNames("value", ind_name))  
   }else{
     stat_df <- stat_df %>%  
       summarize_(value=paste0(stat, "(",var,", na.rm=T)")) %>%
-      rename_(.dots=setNames("value", ind_name))
+      rename_(.dots=stats::setNames("value", ind_name))
   }
   stat_df
 }
@@ -506,6 +506,11 @@ embed_series <- function(df, var, k, time="time", station_id="station") {
 #' Get time series embeds and spatio-temporal indicators
 #'
 #' @param var The name of the variable to summarize into indicators
+#' @param stations An \code{sf} object containing
+#' geographical information on the location of \code{df}
+#' @param betas A vector of values defining the maximum
+#' spatio-temporal distance allowed for an observation to be considered
+#' within a spatio-temporal neighbourhood
 #' @param k A numeric indicating the temporal embed size \(number\)
 #' @param ratios2add A vector of Boolean values indicating, for each
 #' statistic in \code{stats} whether ratios between neighorhoods of 
