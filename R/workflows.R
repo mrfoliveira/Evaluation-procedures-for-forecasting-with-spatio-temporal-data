@@ -41,12 +41,12 @@ simple_workflow <- function(train, test, form, model="lm",
   # pre-process NAs
   if(!is.null(handleNAs)){
     if(handleNAs=="centralImput"){
-      require(DMwR2)
-      idxs <- manyNAs(train, nORp = nORp)
+      
+      idxs <- DMwR2::manyNAs(train, nORp = nORp)
       
       if(length(idxs)) train <- train[-idxs, ]
-      if(anyNA(train)) train <- centralImputation(train)
-      if(anyNA(test)) test <- centralImputation(test)
+      if(anyNA(train)) train <- DMwR2::centralImputation(train)
+      if(anyNA(test)) test <- DMwR2::centralImputation(test)
     }
   }
 

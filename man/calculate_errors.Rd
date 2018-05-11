@@ -15,7 +15,7 @@ rmse(y, y_hat, na.rm = TRUE)
 
 mae(y, y_hat, na.rm = TRUE)
 
-nmae(y, y_hat, y_train = NULL, statFUN = median, na.rm = TRUE)
+nmae(y, y_hat, y_train = NULL, statFUN = stats::median, na.rm = TRUE)
 
 nmse(y, y_hat, y_train = NULL, statFUN = mean, na.rm = TRUE)
 
@@ -26,7 +26,13 @@ nrmse(y, y_hat, y_train = NULL, statFUN = mean, na.rm = TRUE)
 
 \item{y_hat}{a vector of predicted values}
 
+\item{na.rm}{boolean indicating whether NAs should be removed. 
+Default is TRUE}
+
 \item{y_train}{a vector of training values}
+
+\item{statFUN}{summary statistic to use for normalization. Default is 
+median for nmae and mean for nmse.}
 }
 \value{
 one error value

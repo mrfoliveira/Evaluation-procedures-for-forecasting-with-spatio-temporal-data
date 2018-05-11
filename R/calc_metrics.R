@@ -25,6 +25,8 @@ se <- function(y, y_hat) {
 #' Calculate error metrics
 #' @describeIn calculate_errors mean squared error
 #' @inheritParams ae
+#' @param na.rm boolean indicating whether NAs should be removed. 
+#' Default is TRUE
 #' 
 #' @return one error value
 mse <- function(y, y_hat, na.rm=TRUE) mean(se(y, y_hat), na.rm = na.rm)
@@ -35,10 +37,12 @@ rmse <- function(y, y_hat, na.rm=TRUE) sqrt(mse(y, y_hat, na.rm=na.rm))
 #' @describeIn calculate_errors mean absolute error
 mae <- function(y, y_hat, na.rm=TRUE) mean(ae(y, y_hat), na.rm = na.rm)
 
-#' @describeIn calculate_errors normalized mean absolute error
+#' @describeIn calculate_errors normalized mean absolute error 
+#' @param statFUN summary statistic to use for normalization. Default is 
+#' median for nmae and mean for nmse.
 #' 
 #' @param y_train a vector of training values
-nmae <- function(y, y_hat, y_train=NULL, statFUN=median, na.rm=TRUE){
+nmae <- function(y, y_hat, y_train=NULL, statFUN=stats::median, na.rm=TRUE){
   sae <- sum(ae(y, y_hat), na.rm=na.rm)
   if(!is.null(y_train)) denom <- sum(abs(y - statFUN(y_train, na.rm=na.rm)), na.rm=na.rm)
   else denom <- sum(abs(y - statFUN(y, na.rm=na.rm)), na.rm=na.rm)
@@ -79,7 +83,7 @@ nrmse <- function(y, y_hat, y_train=NULL, statFUN=mean, na.rm=TRUE){
 #' \item \code{phi.control} - if \code{phi.parms} is undefined, then \code{phi.control}
 #' can be provided with a list of named arguments to feed function \code{phi.control} using
 #' \code{y_train}. Default is \code{list(method = "extremes", extr.type="high")}
-#' \item \code{loss.parms} - the results of function \code{loss.control}
+#' \item \code{loss.parms} - the results of function \code{uba::loss.control}
 #' \item \code{p} - Default is 0.5
 #' \item \code{thr} - Relevance threshold. Default is 1
 #' \item \code{beta} - Beta for F-measure. Default is 1
@@ -89,7 +93,7 @@ nrmse <- function(y, y_hat, y_train=NULL, statFUN=mean, na.rm=TRUE){
 #' 
 #' @export
 regMetrics <- function(trues, preds, y_train=NULL, 
-                       norm=FALSE, aeStatFUN = median, seStatFUN = mean,
+                       norm=FALSE, aeStatFUN = stats::median, seStatFUN = mean,
                        util=FALSE, util.parms=NULL){
   
   if(length(trues)==0){
@@ -119,7 +123,7 @@ regMetrics <- function(trues, preds, y_train=NULL,
       }
       
       lP <- util.parms$loss.parms
-      if(is.null(lP)) lP <- loss.control(y_train) 
+      if(is.null(lP)) lP <- uba::loss.control(y_train) 
       
       p <- util.parms$p
       if(is.null(p)) p <- 0.5
@@ -130,14 +134,14 @@ regMetrics <- function(trues, preds, y_train=NULL,
       beta <- util.parms$beta
       if(is.null(beta)) beta <- 1
       
-      uP <- util.control(umetric="MU", p = p) ## default
-      mu <- util(preds, trues, phi.parms=pP, loss.parms=lP, util.parms = uP)
-      fm <- util(preds, trues, phi.parms=pP, loss.parms=lP, 
+      uP <- uba::util.control(umetric="MU", p = p) ## default
+      mu <- uba::util(preds, trues, phi.parms=pP, loss.parms=lP, util.parms = uP)
+      fm <- uba::util(preds, trues, phi.parms=pP, loss.parms=lP, 
                  util.parms = list(umetric="Fm", event.thr=thr, beta=beta))
-      aucpr <- util(preds, trues, phi.parms=pP, loss.parms=lP, 
-                    util.parms =  util.control(umetric="AUCPR", event.thr=thr) )
-      aucroc <- util(preds, trues, phi.parms=pP, loss.parms=lP, 
-                     util.parms = util.control(umetric="AUCROC", event.thr=thr) ) 
+      aucpr <- uba::util(preds, trues, phi.parms=pP, loss.parms=lP, 
+                    util.parms =  uba::util.control(umetric="AUCPR", event.thr=thr) )
+      aucroc <- uba::util(preds, trues, phi.parms=pP, loss.parms=lP, 
+                     util.parms = uba::util.control(umetric="AUCROC", event.thr=thr) ) 
       
       metrics <- c(metrics, mu=mu, fm=fm, aucpr=aucpr, aucroc=aucroc)
     }

@@ -110,16 +110,16 @@ sumRes2Tab <- function(sumRes){
         .id = "t_size")),
       .id = "g_size")),
     .id = "model") %>%
-    separate(gen_model, c("gen_type", "gen_order"),
+    tidyr::separate(gen_model, c("gen_type", "gen_order"),
              sep="\\_M\\_") %>%
-    separate(gen_order, c("gen_order", "gen_it"), "\\.") %>%
+    tidyr::separate(gen_order, c("gen_order", "gen_it"), "\\.") %>%
     mutate(lag_order = gsub("L\\_", "", lag_order)) %>% 
     mutate_at(vars(model:metric), as.factor)
   
   sumRes_real <- sumResTab %>% select(model:real)
   sumResTab <- sumResTab %>% select(-real)
   sumRes_others <- sumResTab %>%
-    gather(estimator, estimated, 9:ncol(sumResTab)) %>%
+    tidyr::gather(estimator, estimated, 9:ncol(sumResTab)) %>%
     mutate_if(is.character, as.factor)
   sumResTab <- left_join(sumRes_real, sumRes_others)
   
@@ -131,6 +131,9 @@ sumRes2Tab <- function(sumRes){
 #' @param sumRes A multi-level list of summarized results where the first level 
 #' corresponds to learning model used in the experiment, the second level 
 #' contains results for each data set
+#' 
+#' @param statFUN a function to summarize the evaluation metrics. Default is \code{mean}
+#' @param na.rm whether to remove NAs in function \code{statFUN}
 #'
 #' @return A data frame containing columns identifying the learning model,
 #' data set "gold standard"/"real" error/ (that of the out-set), 
@@ -152,7 +155,7 @@ realSumRes2Tab <- function(sumRes, statFUN=mean,
   sumRes_real <- sumResTab %>% select(model:real)
   sumResTab <- sumResTab %>% select(-real)
   sumRes_others <- sumResTab %>%
-    gather(estimator, estimated, 4:ncol(sumResTab)) %>%
+    tidyr::gather(estimator, estimated, 4:ncol(sumResTab)) %>%
     mutate_if(is.character, as.factor)
   sumResTab <- left_join(sumRes_real, sumRes_others)
   
@@ -248,7 +251,7 @@ compressRes <- function(res, rmAllRaw=F){
         train <- res$in_estRes[[in_est]]$rawRes$train
         res$in_estRes[[in_est]]$rawRes$train <- c(times=length(unique(train[,1])), 
         stations=length(unique(train[,2])), nrows=nrow(train), 
-        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=median(train[,3]), maxTgt=max(train[,3]))
+        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=stats::median(train[,3]), maxTgt=max(train[,3]))
       }else{
         if(length(res$in_estRes[[in_est]]$rawRes)>0){
           for(f in 1:length(res$in_estRes[[in_est]]$rawRes)){
@@ -256,7 +259,7 @@ compressRes <- function(res, rmAllRaw=F){
               train <- res$in_estRes[[in_est]]$rawRes[[f]]$train
               res$in_estRes[[in_est]]$rawRes[[f]]$train <- c(times=length(unique(train[,1])), 
         stations=length(unique(train[,2])), nrows=nrow(train), 
-        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=median(train[,3]), maxTgt=max(train[,3]))
+        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=stats::median(train[,3]), maxTgt=max(train[,3]))
             }
           }
         }

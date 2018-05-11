@@ -13,7 +13,14 @@ get_full_indicators(df, stations, k, betas, alpha = 0.5, var = "value",
 \item{df}{A data frame containing spatio-temporal
 information}
 
+\item{stations}{An \code{sf} object containing
+geographical information on the location of \code{df}}
+
 \item{k}{A numeric indicating the temporal embed size \(number\)}
+
+\item{betas}{A vector of values defining the maximum
+spatio-temporal distance allowed for an observation to be considered
+within a spatio-temporal neighbourhood}
 
 \item{alpha}{a weighting factor for the spatio-temporal distance}
 

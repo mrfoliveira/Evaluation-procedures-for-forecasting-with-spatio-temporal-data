@@ -103,7 +103,9 @@ run_multiple_experiments <- function(data_list, in_set_perc, form,
 #' @param .compress a Boolean indicating whether to compress results
 #' @param .progress a file name to save temporary results
 #' @param .verbose a Boolean indicating whether progress should be reported on during experiments
-#'
+#' @param .saveMem a Boolean indicating whether partial results should be discarded
+#' to save memory. Only possible if .progress is TRUE. Default is FALSE.
+#' 
 #' @return A nested list: top top level identifies grid size, second level identifies time
 #' series size, and third level contains lists with two slots: \code{out_estRes} containing
 #' the results of the out-set estimators, and \code{in_estRes} containing a list of results
@@ -167,17 +169,3 @@ run_all_experiments <- function(models, nested_data_list, in_set_perc, form,
   all.res
 }
 
-
-# # SMALL EXAMPLE
-# nested_data_list <- lapply(lagged_data, function(x)
-#    lapply(x, function(y) list(STARMA.1=y[[1]][1:2], STARMA.2=y[[2]][1:2])))
-# 
-# x <- run_all_experiments(models=c("lm", "rpart"), nested_data_list, 0.8, tgt~., 
-#                                 in_estimators=c("kf_xval", "kf_xval"), 
-#                                 in_est.pars=list(list(nfolds=4), list(nfolds=8)), 
-#                                 out_estimator = "t_oos", 
-#                                 out_est.pars=list(tr.perc = 0.8), 
-#                                 workflow = "simple_workflow", wf.pars=NULL, 
-#                                 evaluator = "evaluate", eval.pars=NULL,
-#                                 seed=1234, site_id="site", time="time",
-#                                 .progress=NULL)

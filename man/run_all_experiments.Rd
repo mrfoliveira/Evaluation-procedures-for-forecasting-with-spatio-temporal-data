@@ -49,6 +49,9 @@ arguments to feed to each estimator apllied to the in-set data}
 \item{.progress}{a file name to save temporary results}
 
 \item{.verbose}{a Boolean indicating whether progress should be reported on during experiments}
+
+\item{.saveMem}{a Boolean indicating whether partial results should be discarded
+to save memory. Only possible if .progress is TRUE. Default is FALSE.}
 }
 \value{
 A nested list: top top level identifies grid size, second level identifies time

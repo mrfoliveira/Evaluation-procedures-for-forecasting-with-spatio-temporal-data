@@ -10,6 +10,10 @@ realSumRes2Tab(sumRes, statFUN = mean, na.rm = FALSE)
 \item{sumRes}{A multi-level list of summarized results where the first level 
 corresponds to learning model used in the experiment, the second level 
 contains results for each data set}
+
+\item{statFUN}{a function to summarize the evaluation metrics. Default is \code{mean}}
+
+\item{na.rm}{whether to remove NAs in function \code{statFUN}}
 }
 \value{
 A data frame containing columns identifying the learning model,

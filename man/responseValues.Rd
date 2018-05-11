@@ -10,6 +10,8 @@ responseValues(formula, data, na = NULL)
 \item{formula}{learning formula}
 
 \item{data}{data set to get the target values from}
+
+\item{na}{what action to perform if NAs are present. Default is na.fail}
 }
 \value{
 A vector of the target values.

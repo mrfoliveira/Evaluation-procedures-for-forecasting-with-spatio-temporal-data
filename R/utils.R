@@ -12,9 +12,10 @@ norm_scale <- function(x){
 #' 
 #' @param formula learning formula
 #' @param data data set to get the target values from
+#' @param na what action to perform if NAs are present. Default is na.fail
 #' @return A vector of the target values.
 responseValues <- function (formula, data, na = NULL) 
-  model.response(model.frame(formula, data, na.action = na))
+  stats::model.response(model.frame(formula, data, na.action = na))
 
 #' Shuffle values/rows
 #' 

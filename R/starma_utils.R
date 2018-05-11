@@ -78,7 +78,7 @@ starma_stat_check <- function(model){
 #' \code{spdep::dnearneigh} and \code{spdep::nblag} where a value higher than 0
 #'  implies that the row and column locations are neighbours
 #' @param n The length of the time series to be generated
-#' @param rand.gen The random generator to be used. Defaults to \code{rnorm}
+#' @param rand.gen The random generator to be used. Defaults to \code{stats::rnorm}
 #' @param innov A matrix of initial innovations. Defaults to 
 #'  \code{matrix(rand.gen(n*ncol(klist[[1]]), ...), n, ncol(klist[[1]]))}
 #' @param seed A seed to set before generating the dataset. Defaults to \code{NULL}
@@ -90,7 +90,7 @@ starma_stat_check <- function(model){
 #' 
 #' @references See example on page 3 of 
 #' \url{https://cran.r-project.org/web/packages/starma/starma.pdf}
-starma_sim <- function (model, klist, n, rand.gen = rnorm, 
+starma_sim <- function (model, klist, n, rand.gen = stats::rnorm, 
           innov = NULL, seed=NULL, FUN=function(x){x}, ...) 
 {
   
@@ -214,7 +214,7 @@ generate_coef <- function(coef_specs=list(c_10=c(-2,2), c_11=c(-2,2),
         if(length(coef_specs[[c]])==1)
           coef[c] <- coef_specs[[c]][1]
         else
-          coef[c] <- runif(1, coef_specs[[c]][1], coef_specs[[c]][2])
+          coef[c] <- stats::runif(1, coef_specs[[c]][1], coef_specs[[c]][2])
       }
       
       if(type=="NL_STAR") 
@@ -225,7 +225,7 @@ generate_coef <- function(coef_specs=list(c_10=c(-2,2), c_11=c(-2,2),
         if(length(coef_specs[[c]])==1)
           coef[c+4] <- coef_specs[[c]][1]
         else
-          coef[c+4] <- runif(1, coef_specs[[c]][1], coef_specs[[c]][2])
+          coef[c+4] <- stats::runif(1, coef_specs[[c]][1], coef_specs[[c]][2])
       }
     }
     
@@ -277,7 +277,7 @@ generate_stdata <- function(Ntimes, klist,
   starma <- starma[(trash+1):(Ntimes+trash),]
 
   if(scale){
-    scaled_starma <- stcenter(starma)
+    scaled_starma <- starma::stcenter(starma)
     assertthat::assert_that( (abs(max(scaled_starma)) < 1E-6 & abs(min(scaled_starma)) < 1E-6), 
                  msg = "Scaling turns data to almost all zeroes!")
     starma <- scaled_starma

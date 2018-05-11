@@ -4,8 +4,9 @@
 \alias{regMetrics}
 \title{Calculate regression metrics}
 \usage{
-regMetrics(trues, preds, y_train = NULL, norm = FALSE, aeStatFUN = median,
-  seStatFUN = mean, util = FALSE, util.parms = NULL)
+regMetrics(trues, preds, y_train = NULL, norm = FALSE,
+  aeStatFUN = stats::median, seStatFUN = mean, util = FALSE,
+  util.parms = NULL)
 }
 \arguments{
 \item{trues}{a vector of true values}
@@ -33,7 +34,7 @@ regression metrics. Should contain slots
 \item \code{phi.control} - if \code{phi.parms} is undefined, then \code{phi.control}
 can be provided with a list of named arguments to feed function \code{phi.control} using
 \code{y_train}. Default is \code{list(method = "extremes", extr.type="high")}
-\item \code{loss.parms} - the results of function \code{loss.control}
+\item \code{loss.parms} - the results of function \code{uba::loss.control}
 \item \code{p} - Default is 0.5
 \item \code{thr} - Relevance threshold. Default is 1
 \item \code{beta} - Beta for F-measure. Default is 1

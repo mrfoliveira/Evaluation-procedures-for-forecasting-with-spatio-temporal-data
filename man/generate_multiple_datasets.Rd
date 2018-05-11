@@ -44,10 +44,10 @@ Defaults to \code{sqrt(Nsites)}.}
 \item{init_seed}{Seed to set at the begining (before coefficient generation).
 Default is \code{1234}.}
 
-\item{sim_seed}{Seed to feed to \code{generate_one_dataset}.
+\item{mid_seed}{Seed to set between grid/time series size change.
 Default is \code{NULL}.}
 
-\item{init_seed}{Seed to set between grid/time series size change.
+\item{sim_seed}{Seed to feed to \code{generate_one_dataset}.
 Default is \code{NULL}.}
 }
 \value{

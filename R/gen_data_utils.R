@@ -109,7 +109,7 @@ st_lag_neib_ord1 <- function(data, neibs, p, slags){
 #' matrices of order 0 and 1 where the values are calculated
 #' using functions from \code{spdep} package. 
 #' @seealso \code{\link{dnearneigh}}, \code{\link{nblag}},
-#' \code{\link{nb2mat}}
+#' \code{\link{spdep::nb2mat}}
 generate_grid <- function(Nsites, grid.h=ceiling(sqrt(Nsites)),
                           grid.w=ceiling(sqrt(Nsites))){
   
@@ -127,7 +127,7 @@ generate_grid <- function(Nsites, grid.h=ceiling(sqrt(Nsites)),
   knb <- spdep::nblag(knb, 2)
   
   klist <- list(order0=diag(Nsites),
-                order1=nb2mat(knb[[1]]))
+                order1=spdep::nb2mat(knb[[1]]))
   
   sites <- as.data.frame(cbind(1:NROW(sites), sites))
   colnames(sites) <- c("id", "x", "y")
@@ -207,7 +207,7 @@ generate_one_dataset <- function(Nsites, Ntimes, coef_spec, gen_coef = TRUE, mty
 #' Defaults to \code{sqrt(Nsites)}.
 #' @param init_seed Seed to set at the begining (before coefficient generation).
 #' Default is \code{1234}.
-#' @param init_seed Seed to set between grid/time series size change.
+#' @param mid_seed  Seed to set between grid/time series size change.
 #' Default is \code{NULL}.
 #' @param sim_seed Seed to feed to \code{generate_one_dataset}.
 #' Default is \code{NULL}.
@@ -316,7 +316,7 @@ lag_multiple_datasets <- function(data_list, LAG_use, SLAGS,
             
             neibs_order1 <- grid_neibs_ord1(dat$grid$sites, dat$grid$klist[[2]])
             # check which sites have complete neighbourhoods
-            int_points <- dat$grid$sites[complete.cases(neibs_order1),]
+            int_points <- dat$grid$sites[stats::complete.cases(neibs_order1),]
             
             lag_dat <- st_lag_neib_ord1(dat$data, neibs_order1, lag, slags[[s]])
             lag_dat <- lag_dat[which(lag_dat$site %in% int_points$id),]

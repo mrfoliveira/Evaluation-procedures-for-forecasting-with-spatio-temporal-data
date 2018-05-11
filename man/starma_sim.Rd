@@ -4,8 +4,8 @@
 \alias{starma_sim}
 \title{Simulate spatio-temporal data using a STARMA model}
 \usage{
-starma_sim(model, klist, n, rand.gen = rnorm, innov = NULL, seed = NULL,
-  FUN = function(x) {     x }, ...)
+starma_sim(model, klist, n, rand.gen = stats::rnorm, innov = NULL,
+  seed = NULL, FUN = function(x) {     x }, ...)
 }
 \arguments{
 \item{model}{A list with components \code{ar} and \code{ma}. Each component
@@ -18,7 +18,7 @@ row and the second index to the column.}
 
 \item{n}{The length of the time series to be generated}
 
-\item{rand.gen}{The random generator to be used. Defaults to \code{rnorm}}
+\item{rand.gen}{The random generator to be used. Defaults to \code{stats::rnorm}}
 
 \item{innov}{A matrix of initial innovations. Defaults to 
 \code{matrix(rand.gen(n*ncol(klist[[1]]), ...), n, ncol(klist[[1]]))}}
