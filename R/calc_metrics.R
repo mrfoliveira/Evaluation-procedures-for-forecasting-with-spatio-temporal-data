@@ -1,10 +1,10 @@
-#' Calculate absolute error
-#' @describeIn calculate_errors
+#' Calculate vector of error values
+#' @describeIn calculate_vector_errors absolute error
 #' 
 #' @param y a vector of true values
 #' @param y_hat a vector of predicted values
 #' 
-#' @return a vector of absolute errors
+#' @return a vector of error values
 ae <- function(y, y_hat) {
   stopifnot(length(y) == length(y_hat),
             is.numeric(y),
@@ -13,13 +13,7 @@ ae <- function(y, y_hat) {
   abs(y - y_hat)
 }
 
-#' Calculate squared error
-#' @describeIn calculate_errors
-#' 
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
-#' 
-#' @return a vector of squared errors
+#' @describeIn calculate_vector_errors squared error
 se <- function(y, y_hat) {
   stopifnot(length(y) == length(y_hat),
             is.numeric(y),
@@ -28,41 +22,22 @@ se <- function(y, y_hat) {
   (y - y_hat) ^ 2
 }
 
-#' Calculate mean squared error
-#' @describeIn calculate_errors
+#' Calculate error metrics
+#' @describeIn calculate_errors mean squared error
+#' @inheritParams ae
 #' 
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
-#' 
-#' @return the mean squared error
+#' @return one error value
 mse <- function(y, y_hat, na.rm=TRUE) mean(se(y, y_hat), na.rm = na.rm)
 
-#' Calculate root mean squared error
-#' @describeIn calculate_errors
-#'  
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
-#' 
-#' @return a vector of root mean squared errors
+#' @describeIn calculate_errors mean squared error
 rmse <- function(y, y_hat, na.rm=TRUE) sqrt(mse(y, y_hat, na.rm=na.rm))
 
-#' Calculate mean absolute error
-#' @describeIn calculate_errors
-#' 
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
-#' 
-#' @return the mean absolute error
+#' @describeIn calculate_errors mean absolute error
 mae <- function(y, y_hat, na.rm=TRUE) mean(ae(y, y_hat), na.rm = na.rm)
 
-#' Calculate normalized mean absolute error
-#' @describeIn calculate_errors
+#' @describeIn calculate_errors normalized mean absolute error
 #' 
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
 #' @param y_train a vector of training values
-#' 
-#' @return the mean absolute error
 nmae <- function(y, y_hat, y_train=NULL, statFUN=median, na.rm=TRUE){
   sae <- sum(ae(y, y_hat), na.rm=na.rm)
   if(!is.null(y_train)) denom <- sum(abs(y - statFUN(y_train, na.rm=na.rm)), na.rm=na.rm)
@@ -70,14 +45,7 @@ nmae <- function(y, y_hat, y_train=NULL, statFUN=median, na.rm=TRUE){
   sae/denom
 } 
 
-#' Calculate normalized mean squared error
-#' @describeIn calculate_errors
-#' 
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
-#' @param y_train a vector of training values
-#' 
-#' @return the mean absolute error
+#' @describeIn calculate_errors normalized mean squared error
 nmse <- function(y, y_hat, y_train=NULL, statFUN=mean, na.rm=TRUE){
   sse <- sum(se(y, y_hat), na.rm=na.rm)
   if(!is.null(y_train)) denom <- sum((y - statFUN(y_train, na.rm=na.rm))^2, na.rm=na.rm)
@@ -85,14 +53,7 @@ nmse <- function(y, y_hat, y_train=NULL, statFUN=mean, na.rm=TRUE){
   sse/denom
 } 
 
-#' Calculate normalized root mean squared error
-#' @describeIn calculate_errors
-#' 
-#' @param y a vector of true values
-#' @param y_hat a vector of predicted values
-#' @param y_train a vector of training values
-#' 
-#' @return the mean absolute error
+#' @describeIn calculate_errors normalized root mean squared error
 nrmse <- function(y, y_hat, y_train=NULL, statFUN=mean, na.rm=TRUE){
   sqrt(nmse(y, y_hat, y_train=y_train, statFUN=statFUN, na.rm=na.rm))
 }
@@ -125,6 +86,8 @@ nrmse <- function(y, y_hat, y_train=NULL, statFUN=mean, na.rm=TRUE){
 #' }
 #' 
 #' @return a named vector of calculated metrics
+#' 
+#' @export
 regMetrics <- function(trues, preds, y_train=NULL, 
                        norm=FALSE, aeStatFUN = median, seStatFUN = mean,
                        util=FALSE, util.parms=NULL){
