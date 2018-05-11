@@ -84,7 +84,7 @@ get_time_dist_mat <- function(times, origin=min(times)){
   # unique timestamps
   times <- sort(unique(times))
   timz <- difftime(times, origin)
-  dists <- as.matrix(dist(timz, diag=TRUE, upper=TRUE))
+  dists <- as.matrix(stats::dist(timz, diag=TRUE, upper=TRUE))
   #dists[upper.tri(dists)] <- Inf
   rownames(dists) <- paste0("TIME_", times)
   colnames(dists) <- paste0("TIME_", times)

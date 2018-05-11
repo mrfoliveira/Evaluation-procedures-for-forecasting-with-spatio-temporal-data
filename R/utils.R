@@ -15,7 +15,7 @@ norm_scale <- function(x){
 #' @param na what action to perform if NAs are present. Default is na.fail
 #' @return A vector of the target values.
 responseValues <- function (formula, data, na = NULL) 
-  stats::model.response(model.frame(formula, data, na.action = na))
+  stats::model.response(stats::model.frame(formula, data, na.action = na))
 
 #' Shuffle values/rows
 #' 
@@ -62,7 +62,7 @@ sp_checker <- function(nfolds, nsites, grid.h=sqrt(nsites), grid.w=sqrt(nsites))
     remainder <- 0
     seq2rep <- 1:nfolds
   }
-  as.vector(sapply(0:(grid.h-1), function(i) guyrot(seq2rep, n=i)))[1:nsites]
+  as.vector(sapply(0:(grid.h-1), function(i) wavethresh::guyrot(seq2rep, n=i)))[1:nsites]
 }
 
 #' Assign the locations of a regular grid to folds
@@ -84,7 +84,3 @@ sp_contig <- function(nfolds, nsites, grid.h=sqrt(nsites), grid.w=sqrt(nsites)){
   as.vector(blocks) 
 }
 
-## TESTING SPATIAL BLOCKING
-# ggplot(cbind(sites, f=sp.checker(16,8*8))) + geom_point(aes(x=x,y=y, color=factor(f)))
-# ggplot(cbind(sites, f=sp.contig(16,8*8))) + geom_point(aes(x=x,y=y, color=factor(f)))
-# ggplot(cbind(sites, f=sp.contig(4,8*8))) + geom_point(aes(x=x,y=y, color=factor(f)))

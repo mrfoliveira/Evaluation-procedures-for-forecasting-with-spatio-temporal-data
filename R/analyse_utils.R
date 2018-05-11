@@ -102,7 +102,6 @@ summarize_all_art_exps <- function(all.res, statFUN, na.rm){
 #' @export
 sumRes2Tab <- function(sumRes){
   require(dplyr)
-  require(tidyr)
   
   sumResTab <- bind_rows(lapply(sumRes, function(d)
     bind_rows(lapply(d, function(x) 
@@ -143,7 +142,6 @@ sumRes2Tab <- function(sumRes){
 realSumRes2Tab <- function(sumRes, statFUN=mean,
                               na.rm = FALSE){
   require(dplyr)
-  require(tidyr)
   
   sumResTab <- bind_rows(lapply(sumRes, function(x) 
     bind_rows(lapply(x, function(y) summarize_one_exp(y, statFUN=statFUN,
@@ -219,7 +217,7 @@ compressRes <- function(res, rmAllRaw=F){
       train <- res$out_estRes$rawRes$train
       res$out_estRes$rawRes$train <- c(times=length(unique(train[,1])), 
         stations=length(unique(train[,2])), nrows=nrow(train), 
-        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=median(train[,3]), maxTgt=max(train[,3]))
+        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=stats::median(train[,3]), maxTgt=max(train[,3]))
     }else{
       if(length(res$in_estRes[[in_est]]$rawRes)>0){
         for(f in 1:length(res$out_estRes$rawRes)){
@@ -227,7 +225,7 @@ compressRes <- function(res, rmAllRaw=F){
             train <- res$out_estRes$rawRes[[f]]$train
             res$out_estRes$rawRes[[f]]$train <- c(times=length(unique(train[,1])), 
           stations=length(unique(train[,2])), nrows=nrow(train), 
-        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=median(train[,3]), maxTgt=max(train[,3]))
+        minTgt=min(train[,3]), meanTgt=mean(train[,3]), medTgt=stats::median(train[,3]), maxTgt=max(train[,3]))
           }
         }
       }
