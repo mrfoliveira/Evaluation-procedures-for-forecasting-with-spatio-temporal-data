@@ -23,8 +23,7 @@ norm_scale <- function(x){
 #' each location in \code{df}
 #' @seealso \code{\link{sf::st_as_sf}}
 df2site_sf <- function(df, site_id, lon, lat, crs){
-  require(sf)
-  require(assertthat)
+  
   # not sf class
   if(!("sf" %in% class(df))){
     assertthat::assert_that(is.numeric(df[[lon]])) #, all(df[[lon]] > -180), all(df[[lon]] < 180),
@@ -34,7 +33,7 @@ df2site_sf <- function(df, site_id, lon, lat, crs){
     
     # create dataset for locations
     sites_df <- df[which(!duplicated(df[[site_id]])), c(site_id, lon, lat)]
-    sites_sf <- st_as_sf(sites_df, coords=c(lon, lat), crs=crs)
+    sites_sf <- st::st_as_sf(sites_df, coords=c(lon, lat), crs=crs)
   }else{
     sites_sf <- df[which(!duplicated(df[[site_id]])), site_id]
   }
@@ -57,8 +56,8 @@ df2site_sf <- function(df, site_id, lon, lat, crs){
 get_spatial_dist_mat <- function(sites_sf, site_id){
   require(sf)
   require(lwgeom)
-  require(assertthat)
-  assert_that(any("sf" %in% class(sites_sf)))
+  
+  assertthat::assert_that(any("sf" %in% class(sites_sf)))
   
   # unique location ids
   sids <- sites_sf[[site_id]]
@@ -68,7 +67,7 @@ get_spatial_dist_mat <- function(sites_sf, site_id){
   colnames(dists) <- paste0("SITE_", sids)  
   rownames(dists) <- paste0("SITE_", sids)
   
-  assert_that(all(!is.na(dists)), all(dists>=0))
+  assertthat::assert_that(all(!is.na(dists)), all(dists>=0))
   
   dists
 }
@@ -82,8 +81,6 @@ get_spatial_dist_mat <- function(sites_sf, site_id){
 #' @return a matrix of distances. Row and column names
 #' are a concatenation of "TIME_" and the time-stamp.
 get_time_dist_mat <- function(times, origin=min(times)){
-  require(assertthat)
-  
   # unique timestamps
   times <- sort(unique(times))
   timz <- difftime(times, origin)
@@ -138,11 +135,9 @@ get_time_dist_mat <- function(times, origin=min(times)){
 get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat, 
                               alpha, time_id="time", site_id="site_id"){
   require(dplyr)
-  require(assertthat)
-  
   # assertions about radius given alpha
-  assert_that(alpha>0, alpha<1, radius>0, radius<min(alpha, 1-alpha))
-  #assert_that(all(s_dist_mat<=1), all(s_dist_mat>=0),
+  assertthat::assert_that(alpha>0, alpha<1, radius>0, radius<min(alpha, 1-alpha))
+  #assertthat::assert_that(all(s_dist_mat<=1), all(s_dist_mat>=0),
   #            all(ifelse(t_dist_mat<=1, t_dist_mat>=0, t_dist_mat==Inf)))
   
   #if(time=="2010-02-01" & site=="12") browser()
@@ -392,7 +387,7 @@ get_st_indicators <- function(df, stations_sf, radiuses = c(0.1),
   # DISTANCE TO THE PRESENT/FUTURE IS INFINITE (distance of row to col)
   t_dist_mat[upper.tri(t_dist_mat, diag=T)] <- Inf
   
-  assert_that(all(s_dist_mat<=1), all(s_dist_mat>=0),
+  assertthat::assert_that(all(s_dist_mat<=1), all(s_dist_mat>=0),
               all(ifelse(t_dist_mat<=1, t_dist_mat>=0, t_dist_mat==Inf)))
   
   for(radius in radiuses){
