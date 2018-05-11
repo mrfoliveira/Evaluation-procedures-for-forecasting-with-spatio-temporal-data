@@ -221,6 +221,8 @@ generate_one_dataset <- function(Nsites, Ntimes, coef_spec, gen_coef = TRUE, mty
 #'  time series size. In total, \code{length(Nsites) x length(Ntimes) 
 #'  x sum(length(mtypes) x ncoefs)} spatio-temporal datasets are generated.
 #' @seealso \code{\link{generate_one_dataset}}
+#' 
+#' @export
 generate_multiple_datasets <- function(Nsites, Ntimes, mtypes, coef_specs, ncoefs, trash=0,
                                        grid.h = ceiling(sqrt(Nsites)), 
                                        grid.w = ceiling(sqrt(Nsites)),
@@ -290,10 +292,12 @@ generate_multiple_datasets <- function(Nsites, Ntimes, mtypes, coef_specs, ncoef
 #' having spatio-temporal embeds.
 #' @seealso \code{\link{generate_multiple_datasets}}, 
 #' \code{\link{st_lag_neib_ord1}}
+#' 
+#' @export
 lag_multiple_datasets <- function(data_list, LAG_use, SLAGS, 
                                   min_time=rep(max(LAG_use), length(LAG_use))){
   lagged_data <- list()
-  assert_that(length(LAG_use) == length(min_time))
+  assertthat::assert_that(length(LAG_use) == length(min_time))
   
   for(g.size in 1:length(data_list)){
     lagged_data[[g.size]] <- list()

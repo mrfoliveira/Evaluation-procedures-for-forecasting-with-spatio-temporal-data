@@ -9,7 +9,7 @@ run_all_experiments(models, nested_data_list, in_set_perc, form, in_estimators,
   in_set_perc), workflow = "simple_workflow", wf.pars = NULL,
   evaluator = "evaluate", eval.pars = NULL, seed = 1234,
   site_id = "site", time = "time", .compress = FALSE, .progress = NULL,
-  .verbose = TRUE)
+  .verbose = TRUE, .saveMem = FALSE)
 }
 \arguments{
 \item{models}{vector of names of models to use for learning}

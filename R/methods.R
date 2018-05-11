@@ -27,11 +27,13 @@
 #' @return The results of \code{FUN}. Usually, a data.frame
 #' with location identifier \code{site_id}, time-stamp \code{time},
 #' true values \code{trues} and the workflow's predictions \code{preds}.
+#' 
+#' @export
 t_oos <- function(data, tr.perc, FUN, form,
                   time="time", site_id="site", 
                   .keepTrain = TRUE, ...){
 
-  assert_that(is.data.frame(data),
+  assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data))
   
@@ -71,13 +73,15 @@ t_oos <- function(data, tr.perc, FUN, form,
 #' with location identifier \code{site_id}, time-stamp \code{time},
 #' true values \code{trues} and the workflow's predictions
 #' \code{preds}.
+#' 
+#' @export
 t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form, 
                      time="time", site_id="site", 
                      .keepTrain=TRUE, ...){
   require(assertthat)
   require(foreach)
   
-  assert_that(is.data.frame(data),
+  assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data))
   
@@ -92,7 +96,7 @@ t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form,
   test.size <- ceiling(ts.perc*n)
     
   # check that it is possible to do the specified number of repetitions
-  assert_that(n - test.size - train.size >= nreps - 1)
+  assertthat::assert_that(n - test.size - train.size >= nreps - 1)
   
   # get range of time indices that can be split points
   selection.range <- (train.size + 1):(n - test.size + 1)
@@ -160,13 +164,15 @@ t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form,
 #' }
 #' @param alloc.pars parameters to pass onto \code{fold.alloc.proc}
 #' @inherit t_oos_mc return
+#' 
+#' @export
 kf_xval <- function(data, nfolds, FUN, form,
                     fold.alloc.proc="Trand_SPrand", alloc.pars=NULL,
                     time="time", site_id="site",
                     .keepTrain=TRUE, ...){
   require(foreach)
   
-  assert_that(is.data.frame(data),
+  assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data),
               fold.alloc.proc %in% c("Trand_SPrand",
@@ -187,7 +193,7 @@ kf_xval <- function(data, nfolds, FUN, form,
   data <- fold_alloc$data
   folds <- fold_alloc$f
   
-  assert_that(is.vector(folds),
+  assertthat::assert_that(is.vector(folds),
               if(!is.null(nfolds)) length(unique(folds)) == nfolds)
   
   cv.res <- foreach(i=unique(folds)) %dopar% {
@@ -237,6 +243,8 @@ kf_xval <- function(data, nfolds, FUN, form,
 #' including the space being used for testing should be removed from the training set.
 #' Default is FALSE, meaning the information is not removed
 #' @inherit t_oos_mc return
+#' 
+#' @export
 prequential_eval <- function(data, nfolds, FUN, form,
                              window = "growing", 
                              fold.alloc.proc="Tblock_SPall", alloc.pars=NULL, 
@@ -247,7 +255,7 @@ prequential_eval <- function(data, nfolds, FUN, form,
   require(stringr)
   require(assertthat)
   
-  assert_that(is.data.frame(data),
+  assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data),
               window %in% c("growing", "sliding"),
@@ -268,7 +276,7 @@ prequential_eval <- function(data, nfolds, FUN, form,
   data <- fold_alloc$data
   folds <- fold_alloc$f
   
-  assert_that(is.vector(folds),
+  assertthat::assert_that(is.vector(folds),
               if(!is.null(nfolds)) length(unique(folds)) == nfolds)
   
   if(fold.alloc.proc != "Tblock_SPall")
@@ -361,6 +369,8 @@ prequential_eval <- function(data, nfolds, FUN, form,
 #' }
 #' @param alloc.pars parameters to pass onto \code{fold.alloc.proc}
 #' @inherit t_oos_mc return
+#' 
+#' @export
 nd_kf_xval <- function(data, nfolds, FUN, form, 
                     fold.alloc.proc="Trand_SPrand", alloc.pars=NULL,
                     t.buffer=NULL, s.buffer=NULL, s.dists=NULL, t.dists=NULL,
@@ -368,7 +378,7 @@ nd_kf_xval <- function(data, nfolds, FUN, form,
                     .keepTrain=TRUE, ...){
   require(foreach)
   
-  assert_that(is.data.frame(data),
+  assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data),
               fold.alloc.proc %in% c("Trand_SPrand",
@@ -379,7 +389,7 @@ nd_kf_xval <- function(data, nfolds, FUN, form,
               (is.null(alloc.pars) | is.list(alloc.pars)),
               .keepTrain %in% c(TRUE, FALSE), msg = "Bad arguments to nd_kf_xval")
   
-  assert_that(ifelse(fold.alloc.proc %in% c("Trand_SPrand", "Tblock_SPrand"), 
+  assertthat::assert_that(ifelse(fold.alloc.proc %in% c("Trand_SPrand", "Tblock_SPrand"), 
                         (!is.null(t.buffer) & !is.null(t.dists)) | (!is.null(s.buffer) & !is.null(s.dists)), 
                             ifelse(grepl("Tall",fold.alloc.proc), 
                                !is.null(s.buffer) & !is.null(s.dists),
@@ -392,7 +402,7 @@ nd_kf_xval <- function(data, nfolds, FUN, form,
   data <- fold_alloc$data
   folds <- fold_alloc$f
   
-  assert_that(is.vector(folds),
+  assertthat::assert_that(is.vector(folds),
               if(!is.null(nfolds)) length(unique(folds)) == nfolds)
   
   cv.res <- foreach(i=unique(folds)) %dopar% {

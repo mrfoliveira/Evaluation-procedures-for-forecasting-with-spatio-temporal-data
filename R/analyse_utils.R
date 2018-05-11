@@ -12,6 +12,8 @@
 #' metrics estimated in the in-set data
 #' 
 #' @seealso \code{\link{run_one_experiment}}
+#' 
+#' @export
 summarize_one_exp <- function(one_exp_res, statFUN=mean,
                               na.rm = FALSE){
   resTab <- cbind(t(one_exp_res$out_estRes$evalRes), 
@@ -96,6 +98,8 @@ summarize_all_art_exps <- function(all.res, statFUN, na.rm){
 #' order of STARMA used to generate, number of iteration of the generation process
 #' with those settings, lag embed order, gold standard error (that of the out-set),
 #' name of error estimator and estimated error (on the in-set), in long format
+#' 
+#' @export
 sumRes2Tab <- function(sumRes){
   require(dplyr)
   require(tidyr)
@@ -131,6 +135,8 @@ sumRes2Tab <- function(sumRes){
 #' @return A data frame containing columns identifying the learning model,
 #' data set "gold standard"/"real" error/ (that of the out-set), 
 #' name of error estimator and estimated error (on the in-set), in long format
+#' 
+#' @export
 realSumRes2Tab <- function(sumRes, statFUN=mean,
                               na.rm = FALSE){
   require(dplyr)

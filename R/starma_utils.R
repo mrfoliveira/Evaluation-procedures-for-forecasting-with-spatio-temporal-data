@@ -31,18 +31,18 @@
 #' @references \url{http://www.tandfonline.com/doi/abs/10.1080/03610918008812173}
 #' @return \code{TRUE} if the model is stationary. \code{FALSE}, otherwise.
 starma_stat_check <- function(model){
-  require(assertthat)
+  
   
   # STATIONARITY CHECK
   p <- if(any(model$ar!=0)) max(which(model$ar!=0, arr.ind = T)[,1], na.rm=T) else 0
   q <- if(any(model$ma!=0)) max(which(model$ma!=0, arr.ind = T)[,1], na.rm=T) else 0
   
-  assert_that(p %in% 0:2, q %in% 0:2, p+q>0)
+  assertthat::assert_that(p %in% 0:2, q %in% 0:2, p+q>0)
   order <- c(ar=p, ma=q)
   
   # (only for STAR(2_11), STAR(2_10), STAR(2_00), STAR(1_1), STAR(1_0) and same order STMAs)
   for(part in c("ar", "ma")){
-    assert_that(ncol(model[[part]])==2)
+    assertthat::assert_that(ncol(model[[part]])==2)
     
     phi_10 = model[[part]][1,1]
     phi_11 = model[[part]][1,2]
@@ -93,7 +93,7 @@ starma_stat_check <- function(model){
 starma_sim <- function (model, klist, n, rand.gen = rnorm, 
           innov = NULL, seed=NULL, FUN=function(x){x}, ...) 
 {
-  require(assertthat)
+  
   
   if(!is.null(seed)) 
     set.seed(seed)
@@ -104,7 +104,7 @@ starma_sim <- function (model, klist, n, rand.gen = rnorm,
     stop("'model' must be list")
   if (n <= 3L) 
     stop("'n' must be strictly positive")
-  assert_that(starma_stat_check(model))
+  assertthat::assert_that(starma_stat_check(model))
   
   p <- if(any(model$ar!=0)) max(which(model$ar!=0, arr.ind = T)[,1], na.rm=T) else 0
   q <- if(any(model$ma!=0)) max(which(model$ma!=0, arr.ind = T)[,1], na.rm=T) else 0
@@ -195,11 +195,11 @@ identity <- function(x){x}
 generate_coef <- function(coef_specs=list(c_10=c(-2,2), c_11=c(-2,2), 
                                             c_20=c(-1,1), c_21=0),
                           type="STAR", ndigits=3){
-  require(assertthat)
+  
   require(starma)
   
-  assert_that(type %in% c("STAR","STARMA","NL_STAR","STMA"))
-  assert_that(all(names(coef_specs)==c("c_10", "c_11", "c_20", "c_21")), 
+  assertthat::assert_that(type %in% c("STAR","STARMA","NL_STAR","STMA"))
+  assertthat::assert_that(all(names(coef_specs)==c("c_10", "c_11", "c_20", "c_21")), 
               all(unlist(lapply(coef_specs, function(x) length(x)>=1 & length(x)<3))))
   
   tofind <- 1
@@ -261,15 +261,15 @@ generate_coef <- function(coef_specs=list(c_10=c(-2,2), c_11=c(-2,2),
 generate_stdata <- function(Ntimes, klist, 
                             coef, scale=FALSE, trash=100, 
                             seed=NULL){
-  require(assertthat)
+  
   require(starma)
   
-  assert_that(all(names(coef)==c("phi_10", "phi_11", "phi_20", "phi_21",
+  assertthat::assert_that(all(names(coef)==c("phi_10", "phi_11", "phi_20", "phi_21",
                                  "theta_10", "theta_11", "theta_20", "theta_21", "FUN")))
   
   model <- list(ar=matrix(as.numeric(coef[1:4]), 2,2, byrow=T), 
                 ma=matrix(as.numeric(coef[5:8]), 2,2, byrow=T))
-  assert_that(starma_stat_check(model), 
+  assertthat::assert_that(starma_stat_check(model), 
               msg = "Coefficients should generate a stationary model.")
   
   starma <- starma_sim(model, klist, Ntimes+trash, seed=seed,
@@ -278,7 +278,7 @@ generate_stdata <- function(Ntimes, klist,
 
   if(scale){
     scaled_starma <- stcenter(starma)
-    assert_that( (abs(max(scaled_starma)) < 1E-6 & abs(min(scaled_starma)) < 1E-6), 
+    assertthat::assert_that( (abs(max(scaled_starma)) < 1E-6 & abs(min(scaled_starma)) < 1E-6), 
                  msg = "Scaling turns data to almost all zeroes!")
     starma <- scaled_starma
   } 

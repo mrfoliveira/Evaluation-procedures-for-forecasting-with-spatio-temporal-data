@@ -19,6 +19,8 @@
 #' @return A list with two slots: \code{out_estRes} containing the results of the out-set
 #' estimators, and \code{in_estRes} containing a list of results of each estimator used on
 #' in-set data
+#' 
+#' @export
 run_one_experiment <- function(data, in_set_perc, form, 
                                in_estimators, in_est.pars, 
                                out_estimator = "t_oos", out_est.pars=list(tr.perc = in_set_perc), 
@@ -108,6 +110,8 @@ run_multiple_experiments <- function(data_list, in_set_perc, form,
 #' of each estimator used on in-set data
 #' 
 #' @seealso \code{\link{run_multiple_experiments}}
+#' 
+#' @export
 run_all_experiments <- function(models, nested_data_list, in_set_perc, form, 
                                 in_estimators, in_est.pars, 
                                 out_estimator = "t_oos", out_est.pars=list(tr.perc = in_set_perc), 

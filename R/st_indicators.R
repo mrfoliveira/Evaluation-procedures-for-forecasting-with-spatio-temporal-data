@@ -522,6 +522,9 @@ embed_series <- function(df, var, k, time="time", station_id="station") {
 #' summary statistics of the values of \code{var} found within the 
 #' spatio-temporal neighbourhoods of the one or more \code{radiuses} 
 #' of each pair (location ID, time-stamp) and ratios between them
+#' 
+#' @export
+#' 
 get_full_indicators <- function(df, stations, k, 
                                betas, alpha=0.5, var="value",
                                stats = c("mean", "weighted.mean", "sd"), 

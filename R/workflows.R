@@ -24,6 +24,8 @@
 #' 
 #' @return a data frame containing time-stamps, location IDs,
 #' true values and predicted values
+#' 
+#' @export
 simple_workflow <- function(train, test, form, model="lm", 
   handleNAs=NULL, min_train=2, nORp = 0.2,
   time="time", site_id="site", ...){
@@ -79,6 +81,8 @@ simple_workflow <- function(train, test, form, model="lm",
 #'
 #' @return The results (or a list of results) of \code{eval.function} applied to 
 #' the data frame (or list of data frames) in \code{wfRes}
+#' 
+#' @export
 evaluate <- function(wfRes,
                      eval.function = get("regressionMetrics", asNamespace("performanceEstimation")),
                      .keptTrain = TRUE,
@@ -119,6 +123,8 @@ evaluate <- function(wfRes,
 #'
 #' @return The results of \code{evaluator} after applying \code{estimator} to the
 #' learning task
+#' 
+#' @export
 estimates <- function(data, form, estimator="kf_xval",
                       est.pars = list(nfolds=10, 
                                       fold.alloc.proc="Trand_SPrand"), 

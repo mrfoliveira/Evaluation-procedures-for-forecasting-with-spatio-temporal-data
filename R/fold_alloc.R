@@ -19,8 +19,10 @@ library(assertthat)
 #' \item \code{f}, a vector with the fold numbers 
 #' (from \code{1} to \code{nfolds}) of each row in \code{data}
 #' }
+#' 
+#' @export
 Trand_SPrand <- function(data, nfolds, time="time", site_id="site") {
-  assert_that(exists("shuffle"), exists("cv_folds"))
+  assertthat::assert_that(exists("shuffle"), exists("cv_folds"))
   
   data <- shuffle(data)
   f <- cv_folds(data, nfolds)
@@ -38,9 +40,11 @@ Trand_SPrand <- function(data, nfolds, time="time", site_id="site") {
 #' }
 #' @inheritParams Trand_SPrand
 #' @inherit Trand_SPrand return
+#' 
+#' @export
 Tall_SPcontig <- function(data, nfolds, time="time", site_id="site"){
   
-  assert_that(exists("shuffle"), exists("sp_contig"))
+  assertthat::assert_that(exists("shuffle"), exists("sp_contig"))
   
   # shuffle time
   data <- shuffle(data)
@@ -65,9 +69,11 @@ Tall_SPcontig <- function(data, nfolds, time="time", site_id="site"){
 #' }
 #' @inheritParams Trand_SPrand
 #' @inherit Trand_SPrand return
+#' 
+#' @export
 Tall_SPrand <- function(data, nfolds, time="time", site_id="site"){
   
-  assert_that(exists("shuffle"), exists("cv_folds"))
+  assertthat::assert_that(exists("shuffle"), exists("cv_folds"))
   
   # order time
   data <- data[ order(data[[time]], data[[site_id]]), ]
@@ -92,9 +98,11 @@ Tall_SPrand <- function(data, nfolds, time="time", site_id="site"){
 #' }
 #' @inheritParams Trand_SPrand
 #' @inherit Trand_SPrand return
+#' 
+#' @export
 Tall_SPchecker <- function(data, nfolds, time="time", site_id="site"){
   
-  assert_that(exists("sp_checker"))
+  assertthat::assert_that(exists("sp_checker"))
   
   # shuffle time
   data <- shuffle(data)
@@ -119,9 +127,11 @@ Tall_SPchecker <- function(data, nfolds, time="time", site_id="site"){
 #' }
 #' @inheritParams Trand_SPrand
 #' @inherit Trand_SPrand return
+#' 
+#' @export
 Tblock_SPall<- function(data, nfolds, time="time", site_id="site"){
   
-  assert_that(exists("shuffle"), exists("cv_folds"))
+  assertthat::assert_that(exists("shuffle"), exists("cv_folds"))
   
   # shuffle space
   data <- shuffle(data)
@@ -146,9 +156,11 @@ Tblock_SPall<- function(data, nfolds, time="time", site_id="site"){
 #' }
 #' @inheritParams Trand_SPrand
 #' @inherit Trand_SPrand return
+#' 
+#' @export
 Trand_SPall <- function(data, nfolds, time="time", site_id="site"){
   
-  assert_that(exists("shuffle"), exists("cv_folds"))
+  assertthat::assert_that(exists("shuffle"), exists("cv_folds"))
   
   # order locations
   data <- data[ order(data[[site_id]], data[[time]]), ]
@@ -182,12 +194,14 @@ Trand_SPall <- function(data, nfolds, time="time", site_id="site"){
 #' (from \code{1} to \code{t.nfolds}) and space-fold number
 #' (from \code{1} to \code{sp.nfolds}), separated by "_".
 #' }
+#' 
+#' @export
 Tblock_SPchecker <- function(data, nfolds,
                                t.nfolds=round(sqrt(nfolds)), 
                                sp.nfolds=round(sqrt(nfolds)),
                              time="time", site_id="site"){
   
-  assert_that(exists("cv_folds"), exists("sp_checker"))
+  assertthat::assert_that(exists("cv_folds"), exists("sp_checker"))
   
   data <- data[ order(data[[time]], data[[site_id]]), ]
   
@@ -218,12 +232,14 @@ Tblock_SPchecker <- function(data, nfolds,
 #' }
 #' @inheritParams Tblock_SPchecker
 #' @inherit Tblock_SPchecker return
+#' 
+#' @export
 Tblock_SPrand <- function(data, nfolds,
                              t.nfolds=round(sqrt(nfolds)), 
                              sp.nfolds=round(sqrt(nfolds)),
                              time="time", site_id="site"){
   
-  assert_that(exists("cv_folds"))
+  assertthat::assert_that(exists("cv_folds"))
   
   data <- data[ order(data[[time]], data[[site_id]]), ]
   
@@ -255,12 +271,14 @@ Tblock_SPrand <- function(data, nfolds,
 #' }
 #' @inheritParams Tblock_SPchecker
 #' @inherit Tblock_SPchecker return
+#' 
+#' @export
 Tblock_SPcontig <- function(data, nfolds,
                               t.nfolds=round(sqrt(nfolds)), 
                               sp.nfolds=round(sqrt(nfolds)),
                               time="time", site_id="site"){
   
-  assert_that(exists("cv_folds"), exists("sp_contig"))
+  assertthat::assert_that(exists("cv_folds"), exists("sp_contig"))
   
   data <- data[ order(data[[time]], data[[site_id]]), ]
   
