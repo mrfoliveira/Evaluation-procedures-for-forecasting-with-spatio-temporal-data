@@ -26,5 +26,5 @@ Extracts the location information from a data frame
 and transforms into a \code{sf} object.
 }
 \seealso{
-\code{\link{sf::st_as_sf}}
+\code{\link[sf]{st_as_sf}}
 }

@@ -1,5 +1,3 @@
-library(assertthat)
-
 #' Classic k-fold CV
 #'
 #' Fold allocation of classic k-fold CV:

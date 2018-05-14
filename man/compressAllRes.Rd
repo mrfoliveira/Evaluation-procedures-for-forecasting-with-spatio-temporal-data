@@ -24,5 +24,5 @@ time and location IDs in the training set, in both \code{out_estRes} and
 Compress results from all (artificial) experiments
 }
 \seealso{
-\code{\link{summarize_all_exps}}, \code{\link{run_all_experiments}}
+\code{\link{summarize_all_art_exps}}, \code{\link{run_all_experiments}}
 }

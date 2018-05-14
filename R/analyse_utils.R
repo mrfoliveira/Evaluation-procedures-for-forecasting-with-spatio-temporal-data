@@ -36,11 +36,12 @@ summarize_one_exp <- function(one_exp_res, statFUN=mean,
 #' first column containing a summary (e.g., the mean) of metrics measured in the out-set data
 #' and further columns containing summaries of metrics estimated in the in-set data
 #' 
-#' @seealso \code{\link{run_multiple_experiment}}, \code{\link{summarize_one_exp}}
+#' @seealso \code{\link{run_multiple_experiments}}, \code{\link{summarize_one_exp}}
+#' @import dplyr
 summarize_multiple_exp <- function(multi_exp_res, statFUN=mean,
                                    na.rm = FALSE){
-  require(dplyr)
-  bind_rows(lapply(multi_exp_res, summarize_one_exp), .id="lag_order")
+  # require(dplyr)
+  dplyr::bind_rows(lapply(multi_exp_res, summarize_one_exp), .id="lag_order")
 }
 
 #' Summarize the results of all (artificial) in-set/out-set experiments
@@ -58,10 +59,12 @@ summarize_multiple_exp <- function(multi_exp_res, statFUN=mean,
 #' with those settings, lag embed order, gold standard error (that of the out-set),
 #' name of error estimator and estimated error (on the in-set)
 #' 
-#' @seealso \code{\link{get_best_from_multi_exp}}, \code{\link{summarize_multiple_exp}}
+#' @seealso \code{\link{summarize_multiple_exp}}
+#'
+#' @import dplyr
 summarize_all_art_exps <- function(all.res, statFUN, na.rm){
   
-  require(dplyr)
+  # require(dplyr)
   sumRes <- list()
   for(model in 1:length(all.res)){
     sumRes[[model]] <- list()
@@ -69,7 +72,7 @@ summarize_all_art_exps <- function(all.res, statFUN, na.rm){
       sumRes[[model]][[g.size]] <- list()
       for(t.size in 1:length(all.res[[model]][[g.size]])){
         sumRes[[model]][[g.size]][[t.size]] <- list()
-        sumRes[[model]][[g.size]][[t.size]] <- bind_rows(lapply(all.res[[model]][[g.size]][[t.size]], function(multi.res)
+        sumRes[[model]][[g.size]][[t.size]] <- dplyr::bind_rows(lapply(all.res[[model]][[g.size]][[t.size]], function(multi.res)
           summarize_multiple_exp(multi.res, statFUN=statFUN, na.rm = na.rm)), .id="gen_model")
       }
       names(sumRes[[model]][[g.size]]) <- names(all.res[[model]][[g.size]])
@@ -100,27 +103,29 @@ summarize_all_art_exps <- function(all.res, statFUN, na.rm){
 #' name of error estimator and estimated error (on the in-set), in long format
 #' 
 #' @export
+#' 
+#' @import dplyr
 sumRes2Tab <- function(sumRes){
-  require(dplyr)
+  # require(dplyr)
   
-  sumResTab <- bind_rows(lapply(sumRes, function(d)
-    bind_rows(lapply(d, function(x) 
-      bind_rows(x,
+  sumResTab <- dplyr::bind_rows(lapply(sumRes, function(d)
+    dplyr::bind_rows(lapply(d, function(x) 
+      dplyr::bind_rows(x,
         .id = "t_size")),
       .id = "g_size")),
     .id = "model") %>%
     tidyr::separate(gen_model, c("gen_type", "gen_order"),
              sep="\\_M\\_") %>%
     tidyr::separate(gen_order, c("gen_order", "gen_it"), "\\.") %>%
-    mutate(lag_order = gsub("L\\_", "", lag_order)) %>% 
-    mutate_at(vars(model:metric), as.factor)
+    dplyr::mutate(lag_order = gsub("L\\_", "", lag_order)) %>% 
+    dplyr::mutate_at(vars(model:metric), as.factor)
   
-  sumRes_real <- sumResTab %>% select(model:real)
-  sumResTab <- sumResTab %>% select(-real)
+  sumRes_real <- sumResTab %>% dplyr::select(model:real)
+  sumResTab <- sumResTab %>% dplyr::select(-real)
   sumRes_others <- sumResTab %>%
     tidyr::gather(estimator, estimated, 9:ncol(sumResTab)) %>%
-    mutate_if(is.character, as.factor)
-  sumResTab <- left_join(sumRes_real, sumRes_others)
+    dplyr::mutate_if(is.character, as.factor)
+  sumResTab <- dplyr::left_join(sumRes_real, sumRes_others)
   
   sumResTab
 }
@@ -139,23 +144,25 @@ sumRes2Tab <- function(sumRes){
 #' name of error estimator and estimated error (on the in-set), in long format
 #' 
 #' @export
+#' 
+#' @import dplyr
 realSumRes2Tab <- function(sumRes, statFUN=mean,
                               na.rm = FALSE){
-  require(dplyr)
+  # require(dplyr)
   
-  sumResTab <- bind_rows(lapply(sumRes, function(x) 
-    bind_rows(lapply(x, function(y) summarize_one_exp(y, statFUN=statFUN,
+  sumResTab <- dplyr::bind_rows(lapply(sumRes, function(x) 
+    dplyr::bind_rows(lapply(x, function(y) summarize_one_exp(y, statFUN=statFUN,
                               na.rm = na.rm)), 
               .id="data")), 
     .id="model") %>%
-    mutate_at(vars(model:metric), as.factor)
+    dplyr::mutate_at(vars(model:metric), as.factor)
   
-  sumRes_real <- sumResTab %>% select(model:real)
-  sumResTab <- sumResTab %>% select(-real)
+  sumRes_real <- sumResTab %>% dplyr::select(model:real)
+  sumResTab <- sumResTab %>% dplyr::select(-real)
   sumRes_others <- sumResTab %>%
     tidyr::gather(estimator, estimated, 4:ncol(sumResTab)) %>%
-    mutate_if(is.character, as.factor)
-  sumResTab <- left_join(sumRes_real, sumRes_others)
+    dplyr::mutate_if(is.character, as.factor)
+  sumResTab <- dplyr::left_join(sumRes_real, sumRes_others)
   
   sumResTab
 }
@@ -173,9 +180,11 @@ realSumRes2Tab <- function(sumRes, statFUN=mean,
 #' time and location IDs in the training set, in both \code{out_estRes} and
 #' \code{in_estRes}.
 #' 
-#' @seealso \code{\link{summarize_all_exps}}, \code{\link{run_all_experiments}}
+#' @seealso \code{\link{summarize_all_art_exps}}, \code{\link{run_all_experiments}}
+#' 
+#' @import dplyr
 compressAllRes <- function(all.res, rmAllRaw=F){
-  require(dplyr)
+  # require(dplyr)
   
   for(model in 1:length(all.res)){
     for(g.size in 1:length(all.res[[model]])){
@@ -206,7 +215,7 @@ compressAllRes <- function(all.res, rmAllRaw=F){
 #' of the number of instances, time and location IDs in the training set
 #' in both \code{out_estRes} and \code{in_estRes}
 #' 
-#' @seealso \code{\link{summarize_one_exps}}, \code{\link{run_one_experiment}}
+#' @seealso \code{\link{summarize_one_exp}}, \code{\link{run_one_experiment}}
 compressRes <- function(res, rmAllRaw=F){
   if(rmAllRaw){
     # remove rawRes from out_est

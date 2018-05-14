@@ -29,6 +29,9 @@
 #' true values \code{trues} and the workflow's predictions \code{preds}.
 #' 
 #' @export
+#' 
+#' @import dplyr
+#' @import foreach
 t_oos <- function(data, tr.perc, FUN, form,
                   time="time", site_id="site", 
                   .keepTrain = TRUE, ...){
@@ -75,11 +78,14 @@ t_oos <- function(data, tr.perc, FUN, form,
 #' \code{preds}.
 #' 
 #' @export
+#' 
+#' @import dplyr
+#' @import foreach
 t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form, 
                      time="time", site_id="site", 
                      .keepTrain=TRUE, ...){
-  require(assertthat)
-  require(foreach)
+  # require(assertthat)
+  requireNamespace("foreach", quietly=TRUE)
   
   assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
@@ -166,11 +172,14 @@ t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form,
 #' @inherit t_oos_mc return
 #' 
 #' @export
+#' 
+#' @import dplyr
+#' @import foreach
 kf_xval <- function(data, nfolds, FUN, form,
                     fold.alloc.proc="Trand_SPrand", alloc.pars=NULL,
                     time="time", site_id="site",
                     .keepTrain=TRUE, ...){
-  require(foreach)
+  requireNamespace("foreach", quietly=TRUE)
   
   assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
@@ -245,15 +254,18 @@ kf_xval <- function(data, nfolds, FUN, form,
 #' @inherit t_oos_mc return
 #' 
 #' @export
+#' 
+#' @import dplyr
+#' @import foreach
 prequential_eval <- function(data, nfolds, FUN, form,
                              window = "growing", 
                              fold.alloc.proc="Tblock_SPall", alloc.pars=NULL, 
                              removeSP = FALSE, time="time", site_id="site",
                              .keepTrain = TRUE,
                              ...){
-  require(foreach)
-  require(stringr)
-  require(assertthat)
+  requireNamespace("foreach", quietly=TRUE)
+  # require(stringr)
+  # require(assertthat)
   
   assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
@@ -371,12 +383,15 @@ prequential_eval <- function(data, nfolds, FUN, form,
 #' @inherit t_oos_mc return
 #' 
 #' @export
+#' 
+#' @import dplyr
+#' @import foreach
 nd_kf_xval <- function(data, nfolds, FUN, form, 
                     fold.alloc.proc="Trand_SPrand", alloc.pars=NULL,
                     t.buffer=NULL, s.buffer=NULL, s.dists=NULL, t.dists=NULL,
                     time="time", site_id="site",
                     .keepTrain=TRUE, ...){
-  require(foreach)
+  requireNamespace("foreach", quietly=TRUE)
   
   assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),

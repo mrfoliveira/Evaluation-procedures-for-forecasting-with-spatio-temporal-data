@@ -28,5 +28,5 @@ name of error estimator and estimated error (on the in-set)
 Summarize the results of all (artificial) in-set/out-set experiments
 }
 \seealso{
-\code{\link{get_best_from_multi_exp}}, \code{\link{summarize_multiple_exp}}
+\code{\link{summarize_multiple_exp}}
 }

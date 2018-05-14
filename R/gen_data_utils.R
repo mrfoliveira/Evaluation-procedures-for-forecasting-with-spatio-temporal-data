@@ -109,11 +109,11 @@ st_lag_neib_ord1 <- function(data, neibs, p, slags){
 #' matrices of order 0 and 1 where the values are calculated
 #' using functions from \code{spdep} package. 
 #' @seealso \code{\link{dnearneigh}}, \code{\link{nblag}},
-#' \code{\link{spdep::nb2mat}}
+#' \code{\link[spdep]{nb2mat}}
 generate_grid <- function(Nsites, grid.h=ceiling(sqrt(Nsites)),
                           grid.w=ceiling(sqrt(Nsites))){
   
-  require(spdep)
+  # require(spdep)
   sites <- matrix(0, grid.h*grid.w, 2)
   for (i in 1:grid.h) {
     for (j in 1:grid.w)

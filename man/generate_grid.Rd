@@ -29,5 +29,5 @@ of order 0 and 1.
 }
 \seealso{
 \code{\link{dnearneigh}}, \code{\link{nblag}},
-\code{\link{spdep::nb2mat}}
+\code{\link[spdep]{nb2mat}}
 }

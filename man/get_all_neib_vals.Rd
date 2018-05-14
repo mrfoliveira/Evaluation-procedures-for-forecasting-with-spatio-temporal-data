@@ -24,6 +24,9 @@ a concatenation of "SITE_" and the location IDs)}
 
 \item{alpha}{a weighting factor for the spatio-temporal distance}
 
+\item{vars}{Vector of character strings indicating the columns
+whose values should be retrieved}
+
 \item{time_id}{the name of the column containing time-stamps}
 
 \item{site_id}{the name of the column containing location IDs}

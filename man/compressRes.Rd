@@ -25,5 +25,5 @@ in both \code{out_estRes} and \code{in_estRes}
 Compress results from one experiment
 }
 \seealso{
-\code{\link{summarize_one_exps}}, \code{\link{run_one_experiment}}
+\code{\link{summarize_one_exp}}, \code{\link{run_one_experiment}}
 }

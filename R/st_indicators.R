@@ -1,14 +1,3 @@
-#' Feature scaling
-#' 
-#' Normalize values to be within the range between [0,1].
-#' @param x a vector of values
-#' @return a scaled vector
-norm_scale <- function(x){
-  if(min(x)!=max(x)) (x - min (x)) / ( max(x) - min(x) )
-  else x
-} 
-
-
 #' Create an sf object of available sites
 #' 
 #' Extracts the location information from a data frame
@@ -21,7 +10,7 @@ norm_scale <- function(x){
 #'
 #' @return a sf object, containing the geographic information for
 #' each location in \code{df}
-#' @seealso \code{\link{sf::st_as_sf}}
+#' @seealso \code{\link[sf]{st_as_sf}}
 df2site_sf <- function(df, site_id, lon, lat, crs){
   
   # not sf class
@@ -33,7 +22,7 @@ df2site_sf <- function(df, site_id, lon, lat, crs){
     
     # create dataset for locations
     sites_df <- df[which(!duplicated(df[[site_id]])), c(site_id, lon, lat)]
-    sites_sf <- st::st_as_sf(sites_df, coords=c(lon, lat), crs=crs)
+    sites_sf <- sf::st_as_sf(sites_df, coords=c(lon, lat), crs=crs)
   }else{
     sites_sf <- df[which(!duplicated(df[[site_id]])), site_id]
   }
@@ -53,9 +42,13 @@ df2site_sf <- function(df, site_id, lon, lat, crs){
 #' are a concatenation of "SITE_" and the location IDs.
 #' 
 #' @seealso \code{\link{df2site_sf}}
+#' 
+#' @importFrom lwgeom st_geod_distance
+#' @importFrom sf st_distance
 get_spatial_dist_mat <- function(sites_sf, site_id){
-  require(sf)
-  require(lwgeom)
+  
+  # require(lwgeom)
+  # require(sf)
   
   assertthat::assert_that(any("sf" %in% class(sites_sf)))
   
@@ -132,9 +125,12 @@ get_time_dist_mat <- function(times, origin=min(times)){
 #' between the two.
 #' 
 #' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' 
+#' @import dplyr
 get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat, 
                               alpha, time_id="time", site_id="site_id"){
-  require(dplyr)
+  #require(dplyr)
+  
   # assertions about radius given alpha
   assertthat::assert_that(alpha>0, alpha<1, radius>0, radius<min(alpha, 1-alpha))
   #assertthat::assert_that(all(s_dist_mat<=1), all(s_dist_mat>=0),
@@ -164,10 +160,10 @@ get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat,
     combns <- expand.grid(rownames(neib_sites), rownames(neib_times))
     colnames(combns) <- c("site", "time")
     combns <- combns %>%
-      left_join(neib_times, by="time") %>%
-      left_join(neib_sites, by="site") %>%
-      mutate(st_dist = s_dist*alpha + t_dist*(1-alpha)) %>%
-      filter(st_dist <= radius) %>%
+      dplyr::left_join(neib_times, by="time") %>%
+      dplyr::left_join(neib_sites, by="site") %>%
+      dplyr::mutate(st_dist = s_dist*alpha + t_dist*(1-alpha)) %>%
+      dplyr::filter(st_dist <= radius) %>%
       dplyr::select(site, time, st_dist) %>%
       as.data.frame()
     combns$site <- gsub("^SITE\\_", "", combns$site)
@@ -193,6 +189,8 @@ get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat,
 #' run in parallel. Default is FALSE
 #' @param nsplits Number of subsets of rows to split the data 
 #' frame into so they can be processed in parallel
+#' @param vars Vector of character strings indicating the columns
+#' whose values should be retrieved
 #' 
 #' @return A data frame where each row describes a neighbour,
 #' with the first two columns containing the location ID and
@@ -215,10 +213,14 @@ get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat,
 #' 
 #' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
 #' @seealso \code{\link{get_st_neighbours}}
+#' 
+#' @import dplyr
+#' @import stringr
 get_all_neib_vals <- function(df, max_radius,
                               t_dist_mat, s_dist_mat, alpha, vars, 
                               time_id, site_id, parallel=FALSE, nsplits=4){
-  require(dplyr)
+  # require(dplyr)
+  # require(stingr)
 
   if(parallel){
     neib_df <- foreach::foreach(i=0:(nsplits-1), .combine='rbind',
@@ -250,7 +252,7 @@ get_all_neib_vals <- function(df, max_radius,
   
 
   cols <- c(site_id, time_id, vars)
-  neib_df <- neib_df %>% left_join(df %>% dplyr::select(one_of(cols)), 
+  neib_df <- neib_df %>% dplyr::left_join(df %>% dplyr::select(one_of(cols)), 
                                    by=stats::setNames(c(site_id, time_id),
                                    paste0("neib_", c(site_id, time_id)) ))
   neib_df
@@ -300,20 +302,24 @@ get_all_neib_vals <- function(df, max_radius,
 #' the neighbourhood will have the shape of a cylinder.
 #' 
 #' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' 
+#' @import dplyr
 get_st_indicator <- function(all_neib_vals, stat, radius, 
                              ind_name, var,
                              time_id="time", site_id="site"){
+  # require(dplyr)
+  
   stat_df <- all_neib_vals %>% 
-    filter(st_dist <= radius) %>%
-    group_by_(time_id, site_id)
+    dplyr::filter(st_dist <= radius) %>%
+    dplyr::group_by_(time_id, site_id)
   if(stat=="weighted.mean"){
     stat_df <- stat_df %>%  
-      summarize_(value=paste0(stat, "(",var,", w=1/st_dist, na.rm=T)")) %>%
-      rename_(.dots=stats::setNames("value", ind_name))  
+      dplyr::summarize_(value=paste0(stat, "(",var,", w=1/st_dist, na.rm=T)")) %>%
+      dplyr::rename_(.dots=stats::setNames("value", ind_name))  
   }else{
     stat_df <- stat_df %>%  
-      summarize_(value=paste0(stat, "(",var,", na.rm=T)")) %>%
-      rename_(.dots=stats::setNames("value", ind_name))
+      dplyr::summarize_(value=paste0(stat, "(",var,", na.rm=T)")) %>%
+      dplyr::rename_(.dots=stats::setNames("value", ind_name))
   }
   stat_df
 }
@@ -364,12 +370,14 @@ get_st_indicator <- function(all_neib_vals, stat, radius,
 #' between time-stapms and \eqn{\alpha} is a weighting factor.
 #' 
 #' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' 
+#' @import dplyr
 get_st_indicators <- function(df, stations_sf, radiuses = c(0.1), 
                            stats = c("mean", "sd"), alpha=0.5, neib_type="cone",
                            time_id="time", site_id="site_id",
                            vars=c("value"), parallel=FALSE, nsplits=4){
-  require(sf)
-  require(lwgeom)
+
+  # require(dplyr)
   
   df[[site_id]] <- as.character(df[[site_id]])
   df[[time_id]] <- as.character(df[[time_id]])
@@ -409,7 +417,7 @@ get_st_indicators <- function(df, stations_sf, radiuses = c(0.1),
     for(stat in stats){
       for(var in vars){
         ind_name <- paste0(var, "_", stat, "_", radius)
-        inds_df <- inds_df %>% left_join(get_st_indicator(neib_vals, 
+        inds_df <- inds_df %>% dplyr::left_join(get_st_indicator(neib_vals, 
                                                           stat = as.character(stat), 
                                                           radius = as.numeric(radius),
                                                           ind_name = ind_name,
@@ -437,6 +445,7 @@ get_st_indicators <- function(df, stations_sf, radiuses = c(0.1),
 #' and additional ratios between the indicators of subsequent radiuses.
 #' 
 #' @seealso \code{\link{get_st_indicators}}
+#' 
 add_ratios <- function(df, var, indStat="mean"){
   idxs <- grep(paste0(var,"_", indStat,"\\_[0-9]\\.[0-9]+$"), colnames(df))
   betas <- sort(sapply(idxs, function(i) as.numeric(gsub(paste0("^",var, "\\_", indStat,"_"), "", colnames(df)[i]))))
@@ -466,8 +475,10 @@ add_ratios <- function(df, var, indStat="mean"){
 #'
 #' @return A data frame with extra columns var_Tm1, var_Tm2, ...,
 #' var_Tm\(k-1\)
+#' 
+#' @import dplyr
 embed_series <- function(df, var, k, time="time", station_id="station") {
-  library(dplyr)
+  # require(dplyr)
 
   df <- as.data.frame(df)
   time_ids <- unique(df[[time]])
@@ -479,7 +490,7 @@ embed_series <- function(df, var, k, time="time", station_id="station") {
     
     all_ids <- expand.grid(s, time_ids)
     colnames(all_ids) <- c(station_id, time)
-    x <- left_join(all_ids, x, by=c(station_id, time))
+    x <- dplyr::left_join(all_ids, x, by=c(station_id, time))
     x <- x[order(x[[time]]),]
     
     ts.index  <- x[[time]][-(1:(k-1))]
@@ -493,7 +504,7 @@ embed_series <- function(df, var, k, time="time", station_id="station") {
   }
   xs <- bind_rows(xs)
   
-  df <- df %>% left_join(xs, by=c(station_id, time, var))
+  df <- df %>% dplyr::left_join(xs, by=c(station_id, time, var))
   df <- df[which(!is.na(df[,var])),]
   df <- df[order(df[[station_id]], df[[time]]),]
   df <- df[which(!(df[,time] %in% sort(time_ids)[1:(k-1)])),]
@@ -525,6 +536,7 @@ embed_series <- function(df, var, k, time="time", station_id="station") {
 #' 
 #' @export
 #' 
+#' @import dplyr
 get_full_indicators <- function(df, stations, k, 
                                betas, alpha=0.5, var="value",
                                stats = c("mean", "weighted.mean", "sd"), 
@@ -565,9 +577,9 @@ get_full_indicators <- function(df, stations, k,
   emb_df[[time_id]] <- as.character(emb_df[[time_id]])
   emb_df[[site_id]] <- as.character(emb_df[[site_id]])
   
-  ind_df <- left_join(emb_df, ind_df, by=c(site_id, time_id)) %>%
+  ind_df <- dplyr::left_join(emb_df, ind_df, by=c(site_id, time_id)) %>%
                        as.data.frame()
-  ind_df <- left_join(ind_df, df, by=c(site_id, time_id, var))
+  ind_df <- dplyr::left_join(ind_df, df, by=c(site_id, time_id, var))
 
   cat("Done!\n")
 

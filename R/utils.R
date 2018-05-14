@@ -52,7 +52,8 @@ cv_folds <- function(x, nfolds) {
 #' Default is \code{sqrt(nfolds)}
 #' @return a vector with the fold assignment of each location
 sp_checker <- function(nfolds, nsites, grid.h=sqrt(nsites), grid.w=sqrt(nsites)){
-  require(wavethresh)
+  # require(wavethresh)
+  
   if(nfolds<grid.h){
     nreps <- floor(grid.h/nfolds)
     remainder <- grid.h %% nfolds

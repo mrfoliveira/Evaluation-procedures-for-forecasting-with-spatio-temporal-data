@@ -25,5 +25,5 @@ and further columns containing summaries of metrics estimated in the in-set data
 Summarize the results of multiple in-set/out-set experiment
 }
 \seealso{
-\code{\link{run_multiple_experiment}}, \code{\link{summarize_one_exp}}
+\code{\link{run_multiple_experiments}}, \code{\link{summarize_one_exp}}
 }

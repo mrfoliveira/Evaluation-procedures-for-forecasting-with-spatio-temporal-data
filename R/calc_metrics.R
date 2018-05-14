@@ -113,13 +113,14 @@ regMetrics <- function(trues, preds, y_train=NULL,
                    nrmse = nrmse(trues, preds, NULL, seStatFUN))
     
     if(util){
-      require(uba)
+      # require(uba)
       
       pP <- util.parms$phi.parms
       if(is.null(pP)){
         pPparms <- util.parms$phi.control
         if(is.null(pPparms)) pPparms <- list(method="extremes", extr.type="high")
-        pP <- do.call("phi.control", c(list(y_train), pPparms))
+        pcfun <- get("phi.control", asNamespace("uba"))
+        pP <- do.call(pcfun, c(list(y_train), pPparms))
       }
       
       lP <- util.parms$loss.parms
