@@ -23,7 +23,7 @@ if(!("ggplot2" in installed.packages())) install.packages("ggplot2")
 To run experiments, run the following lines from the main directory:
 
 ```
-library(STEvaluation)
+library(STEvaluationPaper)
 source("analysis/step1_gen_data.R")
 source("analysis/step2_artificial_experiments.R")
 source("analysis/step3_real_experiments.R")
