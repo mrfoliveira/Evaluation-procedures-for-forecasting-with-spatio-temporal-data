@@ -113,7 +113,6 @@ regMetrics <- function(trues, preds, y_train=NULL,
                    nrmse = nrmse(trues, preds, NULL, seStatFUN))
     
     if(util){
-      # require(uba)
       
       pP <- util.parms$phi.parms
       if(is.null(pP)){

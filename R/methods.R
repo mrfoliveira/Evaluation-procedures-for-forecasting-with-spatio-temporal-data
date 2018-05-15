@@ -36,6 +36,8 @@ t_oos <- function(data, tr.perc, FUN, form,
                   time="time", site_id="site", 
                   .keepTrain = TRUE, ...){
 
+  requireNamespace("foreach", quietly=TRUE)
+  
   assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data))
@@ -84,7 +86,7 @@ t_oos <- function(data, tr.perc, FUN, form,
 t_oos_mc <- function(data, tr.perc, ts.perc, nreps, FUN, form, 
                      time="time", site_id="site", 
                      .keepTrain=TRUE, ...){
-  # require(assertthat)
+  
   requireNamespace("foreach", quietly=TRUE)
   
   assertthat::assert_that(is.data.frame(data),
@@ -179,6 +181,7 @@ kf_xval <- function(data, nfolds, FUN, form,
                     fold.alloc.proc="Trand_SPrand", alloc.pars=NULL,
                     time="time", site_id="site",
                     .keepTrain=TRUE, ...){
+  
   requireNamespace("foreach", quietly=TRUE)
   
   assertthat::assert_that(is.data.frame(data),
@@ -264,9 +267,7 @@ prequential_eval <- function(data, nfolds, FUN, form,
                              .keepTrain = TRUE,
                              ...){
   requireNamespace("foreach", quietly=TRUE)
-  # require(stringr)
-  # require(assertthat)
-  
+
   assertthat::assert_that(is.data.frame(data),
               time %in% colnames(data),
               site_id %in% colnames(data),
@@ -391,6 +392,7 @@ nd_kf_xval <- function(data, nfolds, FUN, form,
                     t.buffer=NULL, s.buffer=NULL, s.dists=NULL, t.dists=NULL,
                     time="time", site_id="site",
                     .keepTrain=TRUE, ...){
+  
   requireNamespace("foreach", quietly=TRUE)
   
   assertthat::assert_that(is.data.frame(data),

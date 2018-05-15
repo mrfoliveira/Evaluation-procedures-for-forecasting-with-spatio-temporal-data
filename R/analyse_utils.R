@@ -40,7 +40,7 @@ summarize_one_exp <- function(one_exp_res, statFUN=mean,
 #' @import dplyr
 summarize_multiple_exp <- function(multi_exp_res, statFUN=mean,
                                    na.rm = FALSE){
-  # require(dplyr)
+
   dplyr::bind_rows(lapply(multi_exp_res, summarize_one_exp), .id="lag_order")
 }
 
@@ -64,7 +64,6 @@ summarize_multiple_exp <- function(multi_exp_res, statFUN=mean,
 #' @import dplyr
 summarize_all_art_exps <- function(all.res, statFUN, na.rm){
   
-  # require(dplyr)
   sumRes <- list()
   for(model in 1:length(all.res)){
     sumRes[[model]] <- list()
@@ -106,7 +105,6 @@ summarize_all_art_exps <- function(all.res, statFUN, na.rm){
 #' 
 #' @import dplyr
 sumRes2Tab <- function(sumRes){
-  # require(dplyr)
   
   sumResTab <- dplyr::bind_rows(lapply(sumRes, function(d)
     dplyr::bind_rows(lapply(d, function(x) 
@@ -148,7 +146,6 @@ sumRes2Tab <- function(sumRes){
 #' @import dplyr
 realSumRes2Tab <- function(sumRes, statFUN=mean,
                               na.rm = FALSE){
-  # require(dplyr)
   
   sumResTab <- dplyr::bind_rows(lapply(sumRes, function(x) 
     dplyr::bind_rows(lapply(x, function(y) summarize_one_exp(y, statFUN=statFUN,
@@ -184,7 +181,6 @@ realSumRes2Tab <- function(sumRes, statFUN=mean,
 #' 
 #' @import dplyr
 compressAllRes <- function(all.res, rmAllRaw=F){
-  # require(dplyr)
   
   for(model in 1:length(all.res)){
     for(g.size in 1:length(all.res[[model]])){
@@ -216,6 +212,7 @@ compressAllRes <- function(all.res, rmAllRaw=F){
 #' in both \code{out_estRes} and \code{in_estRes}
 #' 
 #' @seealso \code{\link{summarize_one_exp}}, \code{\link{run_one_experiment}}
+#' @export
 compressRes <- function(res, rmAllRaw=F){
   if(rmAllRaw){
     # remove rawRes from out_est

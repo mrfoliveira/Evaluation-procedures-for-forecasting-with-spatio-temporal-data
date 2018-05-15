@@ -196,8 +196,6 @@ generate_coef <- function(coef_specs=list(c_10=c(-2,2), c_11=c(-2,2),
                                             c_20=c(-1,1), c_21=0),
                           type="STAR", ndigits=3){
   
-  #require(starma)
-  
   assertthat::assert_that(type %in% c("STAR","STARMA","NL_STAR","STMA"))
   assertthat::assert_that(all(names(coef_specs)==c("c_10", "c_11", "c_20", "c_21")), 
               all(unlist(lapply(coef_specs, function(x) length(x)>=1 & length(x)<3))))
@@ -261,8 +259,6 @@ generate_coef <- function(coef_specs=list(c_10=c(-2,2), c_11=c(-2,2),
 generate_stdata <- function(Ntimes, klist, 
                             coef, scale=FALSE, trash=100, 
                             seed=NULL){
-  
-  #require(starma)
   
   assertthat::assert_that(all(names(coef)==c("phi_10", "phi_11", "phi_20", "phi_21",
                                  "theta_10", "theta_11", "theta_20", "theta_21", "FUN")))

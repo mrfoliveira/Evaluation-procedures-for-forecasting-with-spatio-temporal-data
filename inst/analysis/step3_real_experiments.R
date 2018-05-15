@@ -1,7 +1,7 @@
-#library(dplyr)
-library(ranger)
-library(sf)
-library(doParallel)
+cat("\n\n************************************************\nEXPERIMENTS ON REAL DATA SETS\n************************************************\n\n")
+
+requireNamespace("ranger", quietly=TRUE)
+requireNamespace("doParallel", quietly=TRUE)
 
 # CHANGE NUMBER OF CORES
 NCORES <- 9
@@ -9,11 +9,11 @@ NUM_THREADS <- 5
 NUM_SPLITS <- 10
 # note that NCORES x NUM_THREADS will be actually used when running ranger
 cat(paste("\nUsing", NCORES, "cores and up to", NCORES*NUM_THREADS, "ranger threads\n\n"))
-registerDoParallel(cores=NCORES)
+doParallel::registerDoParallel(cores=NCORES)
 
 DATA_PATH <-  "data/"
 UTILS_PATH <- "R/"
-RES_PATH <- "results/real/"
+RES_PATH <- "inst/results/real/"
 NEIB_PATH <- "R/"
 
 if(!dir.exists(RES_PATH)){
@@ -22,8 +22,8 @@ if(!dir.exists(RES_PATH)){
 } 
 cat(paste0("Saving results to ", RES_PATH, "\n\n"))
 
-to_source <- list.files(UTILS_PATH, full.names=TRUE)
-for(f in to_source) source(f)
+#to_source <- list.files(UTILS_PATH, full.names=TRUE)
+#for(f in to_source) source(f)
 
 # CROSS-VALIDATION SETTINGS
 XVAL_ALLOCS <- c("Trand_SPrand",
@@ -203,3 +203,4 @@ for(model in MODELS){
 }
 cat("\n")
 
+cat("\nDone!\n\n******************\n\n")

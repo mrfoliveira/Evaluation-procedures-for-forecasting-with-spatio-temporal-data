@@ -1,21 +1,22 @@
-#library(dplyr)
-library(ranger)
-library(doParallel)
+cat("\n\n************************************************\nEXPERIMENTS ON ARTIFICIAL DATA SETS\n************************************************\n\n")
+
+requireNamespace("ranger", quietly=TRUE)
+requireNamespace("doParallel", quietly=TRUE)
 
 # CHANGE NUMBER OF CORES
 NCORES <- 16
 NUM_THREADS <- 2
 # note that NCORES x NUM_THREADS will be actually used when running ranger
 cat(paste("\nUsing", NCORES, "cores and up to", NCORES*NUM_THREADS, "ranger threads\n\n"))
-registerDoParallel(cores=NCORES)
+doParallel::registerDoParallel(cores=NCORES)
 
 
 DATA_PATH <-  "data/"
 UTILS_PATH <- "R/"
-RES_PATH <- "results/artificial/"
+RES_PATH <- "inst/results/artificial/"
 
-to_source <- list.files(UTILS_PATH, full.names=TRUE)
-for(f in to_source) source(f)
+#to_source <- list.files(UTILS_PATH, full.names=TRUE)
+#for(f in to_source) source(f)
 
 # CROSS-VALIDATION SETTINGS
 XVAL_ALLOCS <- c("Trand_SPrand","Tall_SPcontig",
@@ -155,3 +156,6 @@ for(model in MODELS){
       }
     }
 }
+
+
+cat("\nDone!\n\n******************\n\n")

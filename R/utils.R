@@ -3,6 +3,8 @@
 #' Normalize values to be within the range between [0,1].
 #' @param x a vector of values
 #' @return a scaled vector
+#' 
+#' @export
 norm_scale <- function(x){
   if(min(x)!=max(x)) (x - min (x)) / ( max(x) - min(x) )
   else x
@@ -52,8 +54,7 @@ cv_folds <- function(x, nfolds) {
 #' Default is \code{sqrt(nfolds)}
 #' @return a vector with the fold assignment of each location
 sp_checker <- function(nfolds, nsites, grid.h=sqrt(nsites), grid.w=sqrt(nsites)){
-  # require(wavethresh)
-  
+
   if(nfolds<grid.h){
     nreps <- floor(grid.h/nfolds)
     remainder <- grid.h %% nfolds

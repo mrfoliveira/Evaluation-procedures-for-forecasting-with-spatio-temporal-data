@@ -35,11 +35,11 @@ source("analysis/step3_real_experiments.R")
 ## Contents
 
 The repository is organized as follows:
-* **analysis** - Contains scripts for generating data and launching experiments
+* **inst/analysis** - Contains scripts for generating data and launching experiments
 * **data** - Contains the real-world data sets used in the experiments in an appropriate format
 * **man** - Contains function documentation
 * **R** - Contains reusable functions
-* **results** - Contains files of the results presented in the paper
+* **inst/results** - Contains files of the results presented in the paper
 
 #### R
 
@@ -55,7 +55,7 @@ The repository is organized as follows:
 * workflow.R - functions needed for the multiple steps in experiments, including learning, generating and evaluating predictions
 
 
-#### analysis
+#### inst/analysis
 
 * step1_gen_data.R - data generation script
 * step2_artificial_experiments.R - running experiments on artificially generated datasets

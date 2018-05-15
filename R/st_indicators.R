@@ -11,6 +11,8 @@
 #' @return a sf object, containing the geographic information for
 #' each location in \code{df}
 #' @seealso \code{\link[sf]{st_as_sf}}
+#' 
+#' @export
 df2site_sf <- function(df, site_id, lon, lat, crs){
   
   # not sf class
@@ -45,10 +47,9 @@ df2site_sf <- function(df, site_id, lon, lat, crs){
 #' 
 #' @importFrom lwgeom st_geod_distance
 #' @importFrom sf st_distance
+#' 
+#' @export
 get_spatial_dist_mat <- function(sites_sf, site_id){
-  
-  # require(lwgeom)
-  # require(sf)
   
   assertthat::assert_that(any("sf" %in% class(sites_sf)))
   
@@ -73,6 +74,8 @@ get_spatial_dist_mat <- function(sites_sf, site_id){
 #' 
 #' @return a matrix of distances. Row and column names
 #' are a concatenation of "TIME_" and the time-stamp.
+#' 
+#' @export
 get_time_dist_mat <- function(times, origin=min(times)){
   # unique timestamps
   times <- sort(unique(times))
@@ -129,7 +132,6 @@ get_time_dist_mat <- function(times, origin=min(times)){
 #' @import dplyr
 get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat, 
                               alpha, time_id="time", site_id="site_id"){
-  #require(dplyr)
   
   # assertions about radius given alpha
   assertthat::assert_that(alpha>0, alpha<1, radius>0, radius<min(alpha, 1-alpha))
@@ -219,8 +221,6 @@ get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat,
 get_all_neib_vals <- function(df, max_radius,
                               t_dist_mat, s_dist_mat, alpha, vars, 
                               time_id, site_id, parallel=FALSE, nsplits=4){
-  # require(dplyr)
-  # require(stingr)
 
   if(parallel){
     neib_df <- foreach::foreach(i=0:(nsplits-1), .combine='rbind',
@@ -307,8 +307,7 @@ get_all_neib_vals <- function(df, max_radius,
 get_st_indicator <- function(all_neib_vals, stat, radius, 
                              ind_name, var,
                              time_id="time", site_id="site"){
-  # require(dplyr)
-  
+
   stat_df <- all_neib_vals %>% 
     dplyr::filter(st_dist <= radius) %>%
     dplyr::group_by_(time_id, site_id)
@@ -377,8 +376,6 @@ get_st_indicators <- function(df, stations_sf, radiuses = c(0.1),
                            time_id="time", site_id="site_id",
                            vars=c("value"), parallel=FALSE, nsplits=4){
 
-  # require(dplyr)
-  
   df[[site_id]] <- as.character(df[[site_id]])
   df[[time_id]] <- as.character(df[[time_id]])
   
@@ -478,7 +475,6 @@ add_ratios <- function(df, var, indStat="mean"){
 #' 
 #' @import dplyr
 embed_series <- function(df, var, k, time="time", station_id="station") {
-  # require(dplyr)
 
   df <- as.data.frame(df)
   time_ids <- unique(df[[time]])

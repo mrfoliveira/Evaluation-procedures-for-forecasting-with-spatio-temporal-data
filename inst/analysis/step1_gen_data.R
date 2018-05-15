@@ -1,4 +1,4 @@
-source("R/gen_data_utils.R")
+cat("\n\n************************************************\nGENERATE ARTIFICIAL DATA\n************************************************\n\n")
 
 DATA_PATH <- "data/"
 

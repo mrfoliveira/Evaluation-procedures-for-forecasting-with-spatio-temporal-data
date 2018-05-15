@@ -113,7 +113,6 @@ st_lag_neib_ord1 <- function(data, neibs, p, slags){
 generate_grid <- function(Nsites, grid.h=ceiling(sqrt(Nsites)),
                           grid.w=ceiling(sqrt(Nsites))){
   
-  # require(spdep)
   sites <- matrix(0, grid.h*grid.w, 2)
   for (i in 1:grid.h) {
     for (j in 1:grid.w)
