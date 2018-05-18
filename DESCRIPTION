@@ -2,7 +2,9 @@ Package: STEvaluationPaper
 Version: 0.5-1
 Date: 2018-05-15
 Title: Evaluation procedures for forecasting with spatio-temporal data
-Description: Research compendium associated with paper "Evaluation procedures for forecasting with spatio-temporal data", authored by Mariana Oliveira, Luis Torgo and Vitor Santos Costa.
+Description: Research compendium associated with paper "Evaluation 
+procedures for forecasting with spatio-temporal data", authored by Mariana Oliveira, 
+Luis Torgo and Vitor Santos Costa. Submitted to ECML 2018.
 Author: Mariana Oliveira, Luis Torgo, Vitor Santos Costa
 Maintainer: Mariana Oliveira <mariana.r.oliveira@inesctec.pt>
 Depends: R (>= 3.1.0)
