@@ -230,7 +230,7 @@ get_all_neib_vals <- function(df, max_radius,
       nrows <- nrow(df)
       subdf <- df[seq(i*ceiling(nrows/nsplits)+1,
         min(nrows, (i+1)*ceiling(nrows/nsplits))),]
-      bind_rows(apply(subdf, 1, function(x) get_st_neighbours(site=x[site_id], 
+      dplyr::bind_rows(apply(subdf, 1, function(x) get_st_neighbours(site=x[site_id], 
                                                    time=x[time_id],
                                                    radius=max_radius,
                                                    t_dist_mat=t_dist_mat, 
@@ -240,7 +240,7 @@ get_all_neib_vals <- function(df, max_radius,
                                                    site_id=site_id)))
     } 
   }else{
-    neib_df <- bind_rows(apply(df, 1, function(x) get_st_neighbours(site=x[site_id], 
+    neib_df <- dplyr::bind_rows(apply(df, 1, function(x) get_st_neighbours(site=x[site_id], 
                                                    time=x[time_id],
                                                    radius=max_radius,
                                                    t_dist_mat=t_dist_mat, 
@@ -498,7 +498,7 @@ embed_series <- function(df, var, k, time="time", station_id="station") {
     
     xs[[i]] <- ts.embed
   }
-  xs <- bind_rows(xs)
+  xs <- dplyr::bind_rows(xs)
   
   df <- df %>% dplyr::left_join(xs, by=c(station_id, time, var))
   df <- df[which(!is.na(df[,var])),]
