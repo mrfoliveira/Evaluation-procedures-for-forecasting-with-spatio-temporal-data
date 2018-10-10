@@ -1,6 +1,6 @@
 # Evaluation procedures for forecasting with spatio-temporal data
 
-This repository contains the research compendium of "Evaluation procedures for forecasting with spatio-temporal data", authored by Mariana Oliveira, Luis Torgo, and Vitor Santos Costa, and submitted to ECML2018.
+This repository contains the research compendium of "Evaluation procedures for forecasting with spatio-temporal data", authored by Mariana Oliveira, Luis Torgo, and Vitor Santos Costa, and presented at ECML-PKDD 2018.
 
 
 ## Prerequisites
