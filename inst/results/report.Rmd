@@ -1,10 +1,15 @@
 ---
-title: "Results ECML 2018"
+title: "Evaluation Procedures for Forecasting with Spatio-Temporal Data"
+author: Mariana Oliveira, Luis Torgo, and Vitor Santos Costa
 output: 
   html_document:
     toc: true
     toc_depth: 3
 ---
+
+This is a report generating the figures and tables in the paper:
+
+Oliveira, Mariana, Luís Torgo, and Vítor Santos Costa. "Evaluation Procedures for Forecasting with Spatio-Temporal Data." In *Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases, ECML-PKDD* (pp. 703–718). Springer, Cham, 2018.
 
 ```{r packages, echo=F, include=F}
 library(knitr)
@@ -22,7 +27,7 @@ knitr::opts_chunk$set(echo = FALSE, eval = TRUE,
 
 
 ```{r script_sources, include=F}
-source("../R/analyse_utils.R")
+source("../../R/analyse_utils.R")
 cbPal <- c("#5e3c99", "#e66101")
 
 #' Abbreviate default experiment method names for use in plots
@@ -31,13 +36,30 @@ cbPal <- c("#5e3c99", "#e66101")
 #'
 #' @return A vector of abbreviated names
 abbr_est_names <- function(x){
-  x <- gsub("all", "a", x)
-  x <- gsub("block", "b", x)
-  x <- gsub("rand", "r", x)
-  x <- gsub("contig", "c", x)
-  x <- gsub("checker", "s", x)
+  x <- gsub("^x", "CV", x)
+  x <- gsub("^p", "P", x)
+  x <- gsub("^h", "H", x)
+  x <- gsub("^mc", "MC", x)
+  
+  x <- gsub("T", "t", x)
+  x <- gsub("S", "s", x)
+  x <- gsub("sP", "SP", x)
+  x <- gsub("\\_t$", "\\_T", x)
+  x <- gsub("\\_s$", "\\_S", x)
+  x <- gsub("\\_st$", "\\_ST", x)
+  x <- gsub("\\_stM$", "\\_STM", x)
+  x <- gsub("sP", "SP", x)
+  
+  x <- gsub("all", "A", x)
+  x <- gsub("block", "B", x)
+  x <- gsub("rand", "R", x)
+  x <- gsub("contig", "C", x)
+  x <- gsub("checker", "S", x)
   x <- gsub("sliding", "slW", x)
   x <- gsub("growing", "grW", x)
+  
+  x <- gsub("CVtbsr_STM", "CVtBsR_STM", x)
+  
   x
 }
 
@@ -63,7 +85,7 @@ resMats <- sumRes %>%
 
 # Artificial results
 
-## Errors
+## Median Errors
 
 ```{r art_box, fig.height=5, fig.width=13}
 x <- sumRes %>% 
@@ -74,7 +96,7 @@ x <- sumRes %>%
          sd = sd(Err, na.rm=T),
          medErr = ifelse(med>0, "over", ifelse(med<0, "under", "acc"))) %>%
   separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
-    mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+    mutate(buffer=ifelse(is.na(buffer) & !grepl("(H|MC)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
   mutate(buffer=gsub("buff", "", buffer))
 
 
@@ -89,6 +111,8 @@ gg1 <- ggplot(x, aes(x=estimator, y=Err, color = medErr)) +
 
 print(gg1) 
 ```
+
+**Fig. 1**: Box plots of estimation errors incurred by cross-validation and out-of-sample procedures on 96 artificial data sets using 2 learning algorithms
 
 ## Relative errors
 
@@ -105,7 +129,7 @@ x <- sumRes %>%
   summarize(nType = n()) %>%
   mutate(frac = nType/sum(nType)) %>%
   separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
-    mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+    mutate(buffer=ifelse(is.na(buffer) & !grepl("(H|MC)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
   mutate(buffer=gsub("buff", "", buffer))
 
 gg4 <- ggplot(x, 
@@ -120,6 +144,8 @@ gg4 <- ggplot(x,
 
 print(gg4)
 ```
+
+**Fig. 3(a)** Bar plots of relative estimation errors incurred by cross-validation and out-of-sample procedures on 96 artificial ~~and 17 real-world~~ data sets using 2 learning algorithms. Note the different legends
 
 ## Absolute errors
 
@@ -139,16 +165,60 @@ for(model in MODELS){
       grepl(!!quo(UQ(g_size)), g_size),
       grepl(!!quo(UQ(t_size)), t_size))
   
-  r <- resMat[, which(colnames(resMat) %in% c(c("xTbSa", "xTbSa_Tbuff", "mc56.4", "pTbSr_grW", "xTrSr", "h80.20")))]
+  r <- resMat[, which(colnames(resMat) %in% c(c("CVtBsA", "CVtBsA_T", "MC56.4", "PtBsR_grW", "CVtRsR", "H80.20")))]
   colnames(r) <- gsub("\\_grW", "", colnames(r))
   colnames(r) <- gsub("buff", "", colnames(r))
   plotCD(r, decreasing=FALSE, cex=1.25)
 }
 ```
 
+**Fig. 4**: Critical difference diagram according to Friedman-Nemenyi test (at 5\% confidence level) for a subset of estimation procedures using 24 artificial data sets ($64\times64$ grid; 150 time-points each)
+
+**Table 3**: Average ranks of absolute errors incurred by cross-validation and out-of-sample procedures when estimating performance on 96 artificial data sets. ~~Best results in bold~~
+
+```{r art_avg_ranks_by_size}
+oos_rs <- list()
+x_rs <- list()
+
+G_SIZES <- unique(resMats$g_size)
+T_SIZES <- unique(resMats$t_size)
+
+for(model in MODELS){
+  oos_rs[[model]] <- list()
+  x_rs[[model]] <- list()
+  for(g_size in G_SIZES){
+    oos_rs[[model]][[g_size]] <- list()
+    x_rs[[model]][[g_size]] <- list()
+    for(t_size in T_SIZES){
+      r <- resMats %>%
+          filter(
+            grepl("nmae", metric),
+            grepl(!!quo(UQ(model)), model))
+      r_oos <- r[,which(grepl("(H|MC|^P)", colnames(r)) & !grepl("rmSP", colnames(r)) &
+            !grepl("slW", colnames(r)))]
+      r_x <- r[,grep("CV", colnames(r))]
+    
+      oos_rs[[model]][[g_size]][[t_size]] <- apply(apply(r_oos,1,rank),1,mean)
+      oos_rs[[model]][[g_size]][[t_size]] <- data.frame(estimator=names(oos_rs[[model]][[g_size]][[t_size]]),avgR=oos_rs[[model]][[g_size]][[t_size]])
+      
+      x_rs[[model]][[g_size]][[t_size]] <- apply(apply(r_x,1,rank),1,mean)
+      x_rs[[model]][[g_size]][[t_size]] <- data.frame(estimator=names(x_rs[[model]][[g_size]][[t_size]]),avgR=x_rs[[model]][[g_size]][[t_size]])
+    }
+  }
+}
+x_rs <- bind_rows(lapply(x_rs, function(x) bind_rows(lapply(x, function(y) bind_rows(y, .id="t_size")), .id="g_size")), .id="model") %>% 
+  spread(estimator, avgR)
+
+oos_rs <- bind_rows(lapply(oos_rs, function(x) bind_rows(lapply(x, function(y) bind_rows(y, .id="t_size")), .id="g_size")), .id="model") %>% 
+  spread(estimator, avgR)
+
+x_rs %>% group_by(model) %>% summarize_if(is.numeric, mean) %>% knitr::kable(digits=2)
+oos_rs %>% group_by(model) %>% summarize_if(is.numeric, mean) %>% knitr::kable(digits=2)
+```
+
 # Real results
 
-## Errors
+## Median Errors
 
 ```{r load real_res}
 load("real_sumRes_med_NArm.Rdata")
@@ -162,7 +232,7 @@ realSumResTab <- realSumRes %>%
     RelErr = (estimated - real)/real,
     AbsErr = abs(estimated - real)) %>%
   filter(metric=="nmae") %>%
-  filter(!(estimator %in% c("xTrSr_STbuff", "xTrSr_Tbuff")))
+  filter(!(estimator %in% c("CVtRsR_ST", "CVtRsR_T")))
 
 realResMats <- realSumResTab %>% 
   select(-c(real, estimated:RelErr)) %>%
@@ -178,7 +248,7 @@ x <- realSumResTab %>%
          sd = sd(Err, na.rm=T),
          medErr = ifelse(med>0, "over", ifelse(med<0, "under", "acc"))) %>%
   separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
-    mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+    mutate(buffer=ifelse(is.na(buffer) & !grepl("(H|MC)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
   mutate(buffer=gsub("buff", "", buffer))
 
 ggplot(x %>% filter(!is.na(Err)), 
@@ -191,6 +261,8 @@ ggplot(x %>% filter(!is.na(Err)),
           axis.text.x = element_text(angle = 90, hjust = 1 )) + 
   geom_hline(yintercept=0, linetype = "dashed")
 ```
+
+**Fig. 2**: Box plots of estimation errors incurred by cross-validation and out-of-sample procedures on 17 real world data sets using 2 learning algorithms
 
 ## Relative errors
 
@@ -208,7 +280,9 @@ x <- realSumResTab %>%
   mutate(frac = nType/sum(nType)) %>%
   ungroup() %>%
   separate(estimator, into = c("estimator", "buffer"), sep="_", fill="right") %>%
-  mutate(buffer=ifelse(is.na(buffer) & !grepl("(h|mc)", estimator), "CV", ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
+  mutate(buffer=ifelse(is.na(buffer) & !grepl("(H|MC)", estimator), 
+                       "CV", 
+                       ifelse(!grepl("(S|T)", buffer), "OOS", paste0("CV-", buffer)))) %>%
   mutate(buffer=gsub("buff", "", buffer))
 
 ggplot(x, 
@@ -223,6 +297,8 @@ ggplot(x,
   
 ```
 
+**Fig. 3(b)**: Bar plots of relative estimation errors incurred by cross-validation and out-of-sample procedures on ~~96 artificial and~~ 17 real-world data sets using 2 learning algorithms. Note the different legends
+
 ## Absolute errors
 
 ```{r real_fried_best, results="asis", fig.height=4, fig.width=8}
@@ -233,7 +309,7 @@ for(model in c("lm", "rf")){
       grepl("nmae", metric),
            grepl(!!quo(UQ(model)), model))
   
-    r <- resMat[, c("xTbSa", "xTbSr", "xTrSr_S", "pTbSr_grW", "h80.20", "pTbSa_grW", "xTrSr")]
+    r <- resMat[, c("CVtBsA", "CVtBsR", "CVtRsR_S", "PtBsR_grW", "H80.20", "PtBsA_grW", "CVtRsR")]
     colnames(r)<-gsub("buff", "", colnames(r))
     colnames(r)<-gsub("\\_grW", "", colnames(r))
     r <- r[complete.cases(r),]
@@ -241,3 +317,37 @@ for(model in c("lm", "rf")){
 }
 
 ```
+
+**Fig. 5** Critical difference diagram according to Friedman-Nemenyi test (at 5\% confidence level) for a subset of estimation procedures using real data sets
+
+**Table 4**: Average ranks of absolute errors incurred by cross-validation and out-of-sample procedures when estimating performance on 17 real-world data sets. ~~Best results in bold~~
+
+```{r}
+MODELS <- c("lm", "rf")
+oos_rs <- list()
+x_rs <- list()
+for(model in MODELS){
+  r <- realResMats %>%
+      filter(
+        grepl("nmae", metric),
+        grepl(!!quo(UQ(model)), model))
+  r_oos <- r[,which(grepl("(H|MC|^P)", colnames(r)) & !grepl("rmSP", colnames(r)) &
+        !grepl("slW", colnames(r)))]
+  r_x <- r[,grep("CV", colnames(r))]
+
+  oos_rs[[model]] <- apply(apply(r_oos,1,rank),1,mean)
+  oos_rs[[model]] <- data.frame(estimator=names(oos_rs[[model]]),avgR=oos_rs[[model]])
+  
+  x_rs[[model]] <- apply(apply(r_x,1,rank),1,mean)
+  x_rs[[model]] <- data.frame(estimator=names(x_rs[[model]]),avgR=x_rs[[model]])
+}
+x_rs <- bind_rows(x_rs, .id="model") %>% spread(estimator, avgR)
+oos_rs <- bind_rows(oos_rs, .id="model") %>% spread(estimator, avgR)
+
+#print(xtable::xtable(x_rs), include.rownames = FALSE, booktabs = TRUE)
+#print(xtable::xtable(oos_rs), include.rownames = FALSE, booktabs = TRUE )
+
+x_rs %>% knitr::kable(digits=2)
+oos_rs %>% knitr::kable(digits=2)
+```
+
