@@ -5,9 +5,9 @@
 \title{Non-dependent cross-validation}
 \usage{
 nd_kf_xval(data, nfolds, FUN, form, fold.alloc.proc = "Trand_SPrand",
-  alloc.pars = NULL, t.buffer = NULL, s.buffer = NULL, s.dists = NULL,
-  t.dists = NULL, time = "time", site_id = "site", .keepTrain = TRUE,
-  ...)
+  alloc.pars = NULL, t.buffer = NULL, s.buffer = NULL,
+  s.dists = NULL, t.dists = NULL, time = "time", site_id = "site",
+  .keepTrain = TRUE, ...)
 }
 \arguments{
 \item{data}{full dataset}

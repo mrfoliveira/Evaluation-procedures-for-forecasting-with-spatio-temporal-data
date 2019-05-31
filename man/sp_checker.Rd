@@ -5,7 +5,8 @@
 \title{Assign the locations of a regular grid to folds
 following a checkered pattern}
 \usage{
-sp_checker(nfolds, nsites, grid.h = sqrt(nsites), grid.w = sqrt(nsites))
+sp_checker(nfolds, nsites, grid.h = sqrt(nsites),
+  grid.w = sqrt(nsites))
 }
 \arguments{
 \item{nfolds}{number of folds to divide the space into}

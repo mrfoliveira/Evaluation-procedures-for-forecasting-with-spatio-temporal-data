@@ -5,8 +5,8 @@
 \title{Cross-validation}
 \usage{
 kf_xval(data, nfolds, FUN, form, fold.alloc.proc = "Trand_SPrand",
-  alloc.pars = NULL, time = "time", site_id = "site", .keepTrain = TRUE,
-  ...)
+  alloc.pars = NULL, time = "time", site_id = "site",
+  .keepTrain = TRUE, ...)
 }
 \arguments{
 \item{data}{full dataset}

@@ -4,9 +4,10 @@
 \alias{estimates}
 \title{Estimate error using a chosen method}
 \usage{
-estimates(data, form, estimator = "kf_xval", est.pars = list(nfolds = 10,
-  fold.alloc.proc = "Trand_SPrand"), workflow = "simple_workflow",
-  wf.pars = NULL, evaluator = "evaluate", eval.pars = NULL, seed = 1234)
+estimates(data, form, estimator = "kf_xval", est.pars = list(nfolds =
+  10, fold.alloc.proc = "Trand_SPrand"), workflow = "simple_workflow",
+  wf.pars = NULL, evaluator = "evaluate", eval.pars = NULL,
+  seed = 1234)
 }
 \arguments{
 \item{data}{a data frame}

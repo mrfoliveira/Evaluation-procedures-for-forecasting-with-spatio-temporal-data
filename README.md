@@ -2,6 +2,11 @@
 
 This repository contains the research compendium of "Evaluation procedures for forecasting with spatio-temporal data", authored by Mariana Oliveira, Luis Torgo, and Vitor Santos Costa, and presented at ECML-PKDD 2018.
 
+You are free to use and/or adapt the code we freely provide. However, we do require that if you do that you cite the paper where these results and code were published:
+
+Oliveira, Mariana, Luís Torgo, and Vítor Santos Costa. "Evaluation Procedures for Forecasting with Spatio-Temporal Data." In *Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases, ECML-PKDD* (pp. 703–718). Springer, Cham, 2018.
+
+If you adapt the code to your own needs, you are also required to maintain information on your code concerning the original source of the code (e.g. the URL of this page) and a reference to the original paper.
 
 ## Prerequisites
 

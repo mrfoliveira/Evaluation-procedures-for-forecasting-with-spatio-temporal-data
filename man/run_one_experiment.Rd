@@ -6,8 +6,9 @@
 \usage{
 run_one_experiment(data, in_set_perc, form, in_estimators, in_est.pars,
   out_estimator = "t_oos", out_est.pars = list(tr.perc = in_set_perc),
-  workflow = "simple_workflow", wf.pars = NULL, evaluator = "evaluate",
-  eval.pars = NULL, seed = 1234, site_id = "site", time = "time")
+  workflow = "simple_workflow", wf.pars = NULL,
+  evaluator = "evaluate", eval.pars = NULL, seed = 1234,
+  site_id = "site", time = "time")
 }
 \arguments{
 \item{data}{a data frame}

@@ -5,8 +5,8 @@
 \title{Get a spatio-temporal indicator from neighbourhood
 data frame}
 \usage{
-get_st_indicator(all_neib_vals, stat, radius, ind_name, var, time_id = "time",
-  site_id = "site")
+get_st_indicator(all_neib_vals, stat, radius, ind_name, var,
+  time_id = "time", site_id = "site")
 }
 \arguments{
 \item{all_neib_vals}{a data frame containing

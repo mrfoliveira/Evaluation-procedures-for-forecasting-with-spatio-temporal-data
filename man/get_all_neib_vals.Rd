@@ -5,8 +5,8 @@
 \title{Get the spatio-temporal neighbourhoods of
 all observations}
 \usage{
-get_all_neib_vals(df, max_radius, t_dist_mat, s_dist_mat, alpha, vars, time_id,
-  site_id, parallel = FALSE, nsplits = 4)
+get_all_neib_vals(df, max_radius, t_dist_mat, s_dist_mat, alpha, vars,
+  time_id, site_id, parallel = FALSE, nsplits = 4)
 }
 \arguments{
 \item{df}{a data frame of observations}

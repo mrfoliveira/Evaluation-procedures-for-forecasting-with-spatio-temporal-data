@@ -7,7 +7,8 @@ containing spatio-temporal information}
 \usage{
 get_st_indicators(df, stations_sf, radiuses = c(0.1), stats = c("mean",
   "sd"), alpha = 0.5, neib_type = "cone", time_id = "time",
-  site_id = "site_id", vars = c("value"), parallel = FALSE, nsplits = 4)
+  site_id = "site_id", vars = c("value"), parallel = FALSE,
+  nsplits = 4)
 }
 \arguments{
 \item{df}{A data frame containing spatio-temporal

@@ -4,8 +4,8 @@
 \alias{generate_coef}
 \title{Generate coefficients for a STARMA stationary process}
 \usage{
-generate_coef(coef_specs = list(c_10 = c(-2, 2), c_11 = c(-2, 2), c_20 = c(-1,
-  1), c_21 = 0), type = "STAR", ndigits = 3)
+generate_coef(coef_specs = list(c_10 = c(-2, 2), c_11 = c(-2, 2), c_20 =
+  c(-1, 1), c_21 = 0), type = "STAR", ndigits = 3)
 }
 \arguments{
 \item{coef_specs}{A named list of coefficient specifications for the models.

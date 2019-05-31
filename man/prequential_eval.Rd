@@ -5,8 +5,9 @@
 \title{Prequential evaluation}
 \usage{
 prequential_eval(data, nfolds, FUN, form, window = "growing",
-  fold.alloc.proc = "Tblock_SPall", alloc.pars = NULL, removeSP = FALSE,
-  time = "time", site_id = "site", .keepTrain = TRUE, ...)
+  fold.alloc.proc = "Tblock_SPall", alloc.pars = NULL,
+  removeSP = FALSE, time = "time", site_id = "site",
+  .keepTrain = TRUE, ...)
 }
 \arguments{
 \item{data}{full dataset}

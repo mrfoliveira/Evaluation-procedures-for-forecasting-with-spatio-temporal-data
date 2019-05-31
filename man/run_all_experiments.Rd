@@ -4,12 +4,13 @@
 \alias{run_all_experiments}
 \title{Run multiple experiments for different grid and time series sizes}
 \usage{
-run_all_experiments(models, nested_data_list, in_set_perc, form, in_estimators,
-  in_est.pars, out_estimator = "t_oos", out_est.pars = list(tr.perc =
-  in_set_perc), workflow = "simple_workflow", wf.pars = NULL,
+run_all_experiments(models, nested_data_list, in_set_perc, form,
+  in_estimators, in_est.pars, out_estimator = "t_oos",
+  out_est.pars = list(tr.perc = in_set_perc),
+  workflow = "simple_workflow", wf.pars = NULL,
   evaluator = "evaluate", eval.pars = NULL, seed = 1234,
-  site_id = "site", time = "time", .compress = FALSE, .progress = NULL,
-  .verbose = TRUE, .saveMem = FALSE)
+  site_id = "site", time = "time", .compress = FALSE,
+  .progress = NULL, .verbose = TRUE, .saveMem = FALSE)
 }
 \arguments{
 \item{models}{vector of names of models to use for learning}
