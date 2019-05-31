@@ -26,12 +26,12 @@ The stationarity constraints for a STAR model are the following:
 \item STAR(2_10), meaning \eqn{phi_21 = 0}
   \deqn{phi_20 > -1}
   \deqn{abs(phi_10) + abs(phi_11) < 1 - phi_20}
-\item STAR(2_00), meaning \eqn{phi_21 = 0 & phi_11 = 0}
+\item STAR(2_00), meaning \eqn{phi_21 = 0 \& phi_11 = 0}
   \deqn{phi_20 > -1}
   \deqn{abs(phi_10) < 1 - phi_20}
-\item STAR(1_1), meaning \eqn{phi_20 = 0 & phi_21 = 0}
+\item STAR(1_1), meaning \eqn{phi_20 = 0 \& phi_21 = 0}
   \deqn{abs(phi_10) + abs(phi_11) < 1}
-\item STAR(1_0), meaning \eqn{phi=20 = 0 & phi_21 = 0 & phi_11 = 0}
+\item STAR(1_0), meaning \eqn{phi=20 = 0 \& phi_21 = 0 \& phi_11 = 0}
   \deqn{abs(phi_10) < 1}
 }
 where \code{phi_10 = model$ar[1,1]}, 

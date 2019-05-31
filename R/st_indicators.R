@@ -127,7 +127,7 @@ get_time_dist_mat <- function(times, origin=min(times)){
 #' and a final colunm containing the spatio-temporal distance
 #' between the two.
 #' 
-#' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' @references Ohashi, Orlando, and Luis Torgo. "Wind speed forecasting using spatio-temporal indicators." ECAI. 2012.
 #' 
 #' @import dplyr
 get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat, 
@@ -213,7 +213,7 @@ get_st_neighbours <- function(site, time, radius, t_dist_mat, s_dist_mat,
 #' Also note that if \code{alpha} is set to 1, then instead of a cone, 
 #' the neighbourhood will have the shape of a cylinder.
 #' 
-#' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' @references Ohashi, Orlando, and Luis Torgo. "Wind speed forecasting using spatio-temporal indicators." ECAI. 2012.
 #' @seealso \code{\link{get_st_neighbours}}
 #' 
 #' @import dplyr
@@ -301,7 +301,7 @@ get_all_neib_vals <- function(df, max_radius,
 #' Also note that if \code{alpha} is set to 1, then instead of a cone, 
 #' the neighbourhood will have the shape of a cylinder.
 #' 
-#' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' @references Ohashi, Orlando, and Luis Torgo. "Wind speed forecasting using spatio-temporal indicators." ECAI. 2012.
 #' 
 #' @import dplyr
 get_st_indicator <- function(all_neib_vals, stat, radius, 
@@ -368,7 +368,7 @@ get_st_indicator <- function(all_neib_vals, stat, radius,
 #' locations, {t_{i,j}} is the temporal distance
 #' between time-stapms and \eqn{\alpha} is a weighting factor.
 #' 
-#' @references \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+#' @references Ohashi, Orlando, and Luis Torgo. "Wind speed forecasting using spatio-temporal indicators." ECAI. 2012.
 #' 
 #' @import dplyr
 get_st_indicators <- function(df, stations_sf, radiuses = c(0.1), 

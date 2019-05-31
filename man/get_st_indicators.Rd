@@ -71,5 +71,5 @@ locations, {t_{i,j}} is the temporal distance
 between time-stapms and \eqn{\alpha} is a weighting factor.
 }
 \references{
-\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+Ohashi, Orlando, and Luis Torgo. "Wind speed forecasting using spatio-temporal indicators." ECAI. 2012.
 }

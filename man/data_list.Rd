@@ -25,11 +25,11 @@ Spatio-temporal data from multiple sources used for the experimental section in
 }
 \references{
 \itemize{
- \item Sonja Pravilovic, Annalisa Appice, and Donato Malerba. Leveraging corre-lation across space and time to interpolate geophysical data via CoKriging.Int. J. Geogr. Inf. Sci., 32(1):191–212, 2018.
+ \item Sonja Pravilovic, Annalisa Appice, and Donato Malerba. Leveraging correlation across space and time to interpolate geophysical data via CoKriging. Int. J. Geogr. Inf. Sci., 32(1):191--212, 2018.
  \item Tomislav Hengl.GSIF: Global Soil Information Facilities, 2017.
- \item Caley  K  Gasch,  Tomislav  Hengl,  Benedikt  Graler,  Hanna  Meyer,  Troy  SMagney, and David J Brown.  Spatio-temporal interpolation of soil water,temperature, and electrical conductivity in 3D+ T: The Cook AgronomyFarm data set.Spat. Stat., 14:70–90, 2015.
- \item Edzer Pebesma. spacetime: Spatio-Temporal Data in R. J. Stat. Softw., 51(7):1–30, 2012.
- \item Yu Zheng, Furui Liu, and Hsun-Ping Hsieh. U-Air: When Urban Air QualityInference Meets Big Data. InProc. 19th ACM SIGKDD Int. Conf. Knowl.Discov. Data Min., KDD ’13, pages 1436–1444, New York, NY, USA, 2013.ACM.
+ \item Caley  K  Gasch,  Tomislav  Hengl,  Benedikt  Graler,  Hanna  Meyer,  Troy  SMagney, and David J Brown.  Spatio-temporal interpolation of soil water, temperature, and electrical conductivity in 3D+ T: The Cook Agronomy Farm data set.Spat. Stat., 14:70–90, 2015.
+ \item Edzer Pebesma. spacetime: Spatio-Temporal Data in R. J. Stat. Softw., 51(7):1--30, 2012.
+ \item Yu Zheng, Furui Liu, and Hsun-Ping Hsieh. U-Air: When Urban Air QualityInference Meets Big Data. In Proc. 19th ACM SIGKDD Int. Conf. Knowl. Discov. Data Min., KDD '13, pages 1436--1444, New York, NY, USA, 2013.ACM.
  }
 }
 \keyword{datasets}

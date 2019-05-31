@@ -57,5 +57,5 @@ Also note that if \code{alpha} is set to 1, then instead of a cone,
 the neighbourhood will have the shape of a cylinder.
 }
 \references{
-\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.258.8742&rep=rep1&type=pdf}
+Ohashi, Orlando, and Luis Torgo. "Wind speed forecasting using spatio-temporal indicators." ECAI. 2012.
 }
