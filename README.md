@@ -8,6 +8,8 @@ Oliveira, Mariana, Luís Torgo, and Vítor Santos Costa. "Evaluation Procedures 
 
 If you adapt the code to your own needs, you are also required to maintain information on your code concerning the original source of the code (e.g. the URL of this page) and a reference to the original paper.
 
+Other supplementary material (e.g., slides of conference presentation) available at http://www.dcc.fc.up.pt/~moliveira/publication/18-ecml-evaluation-spatiotemporal/.
+
 ## Prerequisites
 
 To install this package, run:
