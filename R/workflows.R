@@ -132,7 +132,7 @@ estimates <- function(data, form, estimator="kf_xval",
                       evaluator = "evaluate", eval.pars=NULL,
                       seed=1234){
   
-  if(!is.null(seed)) set.seed(1234)
+  if(!is.null(seed)) set.seed(seed)
   
   res <- do.call(estimator, c(list(data=data, form=form, 
                                    FUN=get(workflow, mode="function")), 
