@@ -31,9 +31,17 @@ To run experiments, run the following lines from the main directory:
 
 ```
 library(STEvaluationPaper)
-source("analysis/step1_gen_data.R")
-source("analysis/step2_artificial_experiments.R")
-source("analysis/step3_real_experiments.R")
+PATH <- system.file("inst/", package="STEvaluationPaper")
+source(paste0(PATH, "/analysis/step1_gen_data.R"))
+source(paste0(PATH, "/analysis/step2_artificial_experiments.R"))
+source(paste0(PATH, "/analysis/step3_real_experiments.R"))
+```
+
+To generate an HTML report containing all figures and tables in the article, run:
+
+```
+library(STEvaluationPaper)
+knitr::knit(system.file("inst/results/report.Rmd", package="STEvaluationPaper"))
 ```
 
 ## Contents
