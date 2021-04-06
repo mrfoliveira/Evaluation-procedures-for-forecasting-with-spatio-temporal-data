@@ -6,9 +6,13 @@ You are free to use and/or adapt the code we freely provide. However, we do requ
 
 Oliveira, Mariana, Luís Torgo, and Vítor Santos Costa. "Evaluation Procedures for Forecasting with Spatio-Temporal Data." In *Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases, ECML-PKDD* (pp. 703–718). Springer, Cham, 2018.
 
+@inproceedings{Oliveira2018, author = {Mariana Oliveira and Lu{\'{\i}}s Torgo and V{\'{\i}}tor Santos Costa}, editor = {Michele Berlingerio and Francesco Bonchi and Thomas G{\"{a}}rtner and Neil Hurley and Georgiana Ifrim}, title = {Evaluation Procedures for Forecasting with Spatio-Temporal Data}, booktitle = {Machine Learning and Knowledge Discovery in Databases - European Conference, {ECML} {PKDD} 2018, Dublin, Ireland, September 10-14, 2018, Proceedings, Part {I}}, series = {Lecture Notes in Computer Science}, volume = {11051}, pages = {703--718}, publisher = {Springer}, year = {2018}, url = {https://doi.org/10.1007/978-3-030-10925-7\_43}, doi = {10.1007/978-3-030-10925-7\_43}}
+
 If you adapt the code to your own needs, you are also required to maintain information on your code concerning the original source of the code (e.g. the URL of this page) and a reference to the original paper.
 
 Other supplementary material (e.g., slides of conference presentation) available at http://www.dcc.fc.up.pt/~moliveira/publication/18-ecml-evaluation-spatiotemporal/.
+
+**Note:** An extended version of this article has since been published at the open-access journal [_Mathematics_](https://www.mdpi.com/2227-7390/9/6/691). Code available [here](https://github.com/mrfoliveira/STEvaluation-MDPI2021). 
 
 ## Prerequisites
 
